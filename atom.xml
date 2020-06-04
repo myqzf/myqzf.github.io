@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-06-04T02:27:11.575Z</updated>
+  <updated>2020-01-02T01:17:00.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,13 +17,243 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>工作/两路由局域网服务访问</title>
+    <link href="http://yoursite.com/2020/06/04/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/"/>
+    <id>http://yoursite.com/2020/06/04/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/</id>
+    <published>2020-06-04T03:05:32.231Z</published>
+    <updated>2020-01-02T01:17:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>两路由组建局域网，实现服务访问</p><h4 id="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"><a href="#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。" class="headerlink" title="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"></a>需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。</h4><p><a href="https://simimg.com/i/5HSuX"><img src="https://s1.simimg.com/2017/09/03/5HSuX.png" alt="5HSuX.png"></a></p><h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>  1、原有网络局域网现状<br>       主路由：网关：192.168.1.2<br>              子网掩码：255.255.255.0<br>              IP:192.168.1.xxx<br>        PC :  IP：192.168.1.101<br>             子网掩码：255.255.255.0<br>             网关：192.168.1.2<br>  2、副路由<br>      LAN口： IP:10.10.10.1<br>             子网掩码：255.0.0.0<br>      WAN口： IP:192.168.1.20<br>              子网掩码：255.255.255.0<br>              网关：192.168.1.2<br>  3、盒子<br>      IP:10.10.10.100<br>      子网掩码：255.0.0.0<br>      网关：10.10.10.1</p><h1 id="副路由-（TP-LINK）设置"><a href="#副路由-（TP-LINK）设置" class="headerlink" title="副路由 （TP-LINK）设置"></a>副路由 （TP-LINK）设置</h1><p>   1、路由通电后，通过浏览器访问路由地址（192.168.0.1）。<br>   2、LAN口设置：IP地址：10.10.10.1（可任意），子网掩码：255.0.0.0（根据IP定）。<br>   3、保存，重启路由。<br>   4、通过浏览器访问路由地址10.10.10.1<br>   5、WAN口设置<br>         模式：静态IP<br>         IP地址：192.168.1.20（在原局域网内不冲突即可，此IP用于盒子服务的访问）<br>         子网掩码：255.255.255.0<br>         网关：192.168.1.2<br>         DNS服务器：192.168.1.2<br>   6、虚拟服务器 端口映射 把80端口映射到盒子ip:10.10.10.100<br>   7、把网线从原路由LAN口连接到副路由WAN口。</p><h1 id="盒子服务安装及设置"><a href="#盒子服务安装及设置" class="headerlink" title="盒子服务安装及设置"></a>盒子服务安装及设置</h1><p>   1、安装好Tomcat及nginx服务。(注意：静态页面中IP要为动态获取。)<br>   2、修改nginx配置：监听80端口，转发到tomcat。<br>即可在PC上通过192.168.1.20访问盒子上的tomcat服务。</p><h1 id="下面实现可以域名访问"><a href="#下面实现可以域名访问" class="headerlink" title="下面实现可以域名访问"></a>下面实现可以域名访问</h1><p>前提：拥有主路由的管理权（要修改DNS）<br>   因要考虑在无网络的情况及不修改原有网络机器，所以在盒子上部署DNS服务器。<br>   1、在盒子上部署DNS服务器。（参考上篇：DNS主备服务）<br>   2、配置域名指向,域名指向的IP地址应为副路由WAN口地址（192.168.1.20）<br>   3、在副路由中配置DNS<br>      在虚拟服务器 端口映射添加记录，把53端口指向到盒子IP:10.10.10.100,协议为全部。<br>   4、在主路由中配置DNS<br>      在DHCP服务器中首选DNS输入192.168.1.20，备用DNS输入114.114.114.114<br>即可在PC上通过域名访问盒子上服务。</p><h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><p>如若在准备阶段就可给盒子分配一该网络下固定的IP，就可省去路由这一步。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;两路由组建局域网，实现服务访问&lt;/p&gt;
+&lt;h4 id=&quot;需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot;&gt;&lt;a href=&quot;#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot; class=&quot;headerlink&quot; ti
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>linux/命令/chattr与lsattr</title>
+    <link href="http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/chattr%E4%B8%8Elsattr/"/>
+    <id>http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/chattr%E4%B8%8Elsattr/</id>
+    <published>2020-06-04T03:05:30.649Z</published>
+    <updated>2018-06-01T10:10:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>chattr与lsattr</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;chattr与lsattr&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>linux/命令/adduser新增用户</title>
+    <link href="http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/"/>
+    <id>http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/</id>
+    <published>2020-06-04T03:05:30.638Z</published>
+    <updated>2018-06-05T03:07:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>adduser新增用户</p><p>useradd新增用户比较复杂，可用adduser新增用户。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> adduser elastic</span></span><br><span class="line">Adding user `elastic' ...</span><br><span class="line">Adding new group `elastic' (1000) ...</span><br><span class="line">Adding new user `elastic' (1000) with group `elastic' ...</span><br><span class="line">Creating home directory `/home/elastic' ...</span><br><span class="line">Copying files from `/etc/skel' ...</span><br><span class="line">Enter new UNIX password:</span><br><span class="line">Retype new UNIX password:</span><br><span class="line">passwd: password updated successfully</span><br><span class="line">Changing the user information for elastic</span><br><span class="line">Enter the new value, or press ENTER for the default</span><br><span class="line">        Full Name []: elasticsearch</span><br><span class="line">        Room Number []:</span><br><span class="line">        Work Phone []:</span><br><span class="line">        Home Phone []:</span><br><span class="line">        Other []:</span><br><span class="line">Is the information correct? [Y/n] y</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;adduser新增用户&lt;/p&gt;
+&lt;p&gt;useradd新增用户比较复杂，可用adduser新增用户。&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;lin
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>java/第三方授权-QQ</title>
+    <link href="http://yoursite.com/2020/06/04/java/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%88%E6%9D%83-QQ/"/>
+    <id>http://yoursite.com/2020/06/04/java/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%88%E6%9D%83-QQ/</id>
+    <published>2020-06-04T03:05:28.772Z</published>
+    <updated>2018-06-27T12:31:08.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>QQ第三方授权</p><ol><li><p>申请appid和appkey<br><a href="http://connect.qq.com/intro/login/">申请地址</a></p></li><li><p>获取授权<br> 在前台点击qq登录时去请求 </p></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;authorize?response_type&#x3D;code&amp;client_id&#x3D;[YOUR_APPID]&amp;redirect_uri&#x3D;[YOUR_REDIRECT_URI]&amp;scope&#x3D;[THE_SCOPE]</span><br></pre></td></tr></table></figure><p>3、通过Authorization Code获取Access Token<br>通过回调获得的code 发送请求</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;token?grant_type&#x3D;authorization_code&amp;client_id&#x3D;</span><br></pre></td></tr></table></figure><p>[YOUR_APP_ID]&amp;client_secret=[YOUR_APP_Key]&amp;code=[The_AUTHORIZATION_CODE]&amp;state=[The_CLIENT_STATE]&amp;redirect_uri=[YOUR_REDIRECT_URI]</p><p>4、使用Access Token来获取用户的OpenID<br> 发送请求</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;me?access_token&#x3D;YOUR_ACCESS_TOKEN</span><br></pre></td></tr></table></figure><p>5、使用Access Token以及OpenID来访问用户数据</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;user&#x2F;get_user_info?access_token&#x3D;YOUR_ACCESS_TOKEN&amp;oauth_consumer_key&#x3D;YOUR_APP_ID&amp;openid&#x3D;YOUR_OPENID</span><br></pre></td></tr></table></figure><p>参考文档：<a href="http://wiki.connect.qq.com/%e5%bc%80%e5%8f%91%e6%94%bb%e7%95%a5_server-side">http://wiki.connect.qq.com/%e5%bc%80%e5%8f%91%e6%94%bb%e7%95%a5_server-side</a></p><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN">微信第三方授权登录</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;QQ第三方授权&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;申请appid和appkey&lt;br&gt;&lt;a href=&quot;http://connect.qq.com/intro/login/&quot;&gt;申请地址&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;获取授权&lt;br&gt; 在前台点击qq登录时去请求 &lt;
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>hexo/相册功能</title>
+    <link href="http://yoursite.com/2020/06/04/hexo/%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD/"/>
+    <id>http://yoursite.com/2020/06/04/hexo/%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD/</id>
+    <published>2020-06-04T03:05:28.458Z</published>
+    <updated>2018-06-04T13:30:38.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>hexo 增加相册功能</p><p>主题使用的 <a href="https://github.com/litten/hexo-theme-yilia">Yilia</a> 主题。</p><p>1、创建可点击链接</p><p>进入博客目录执行</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> hexo new page photos</span></span><br></pre></td></tr></table></figure><p>会在source下生成photos/index.md文件。然后在主题站点的配置文件themes/yilia/_config.yml中添加点击的文案和跳转到位置 。</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">主页:</span> <span class="string">/</span></span><br><span class="line">  <span class="string">文章:</span> <span class="string">/archives/</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/</span></span><br><span class="line">  <span class="string">随笔:</span> <span class="string">/tags/随笔/</span></span><br><span class="line">  <span class="string">相册:</span> <span class="string">/photos/</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about</span></span><br></pre></td></tr></table></figure><p>参考：<a href="https://blog.csdn.net/qq_22656383/article/details/79393146">https://blog.csdn.net/qq_22656383/article/details/79393146</a></p><p><a href="https://github.com/maker997/backupBlog">https://github.com/maker997/backupBlog</a></p><p><a href="https://www.jianshu.com/p/370ca4ef808a">https://www.jianshu.com/p/370ca4ef808a</a></p><p><a href="https://github.com/luojinghui/luojinghui.github.io">https://github.com/luojinghui/luojinghui.github.io</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;hexo 增加相册功能&lt;/p&gt;
+&lt;p&gt;主题使用的 &lt;a href=&quot;https://github.com/litten/hexo-theme-yilia&quot;&gt;Yilia&lt;/a&gt; 主题。&lt;/p&gt;
+&lt;p&gt;1、创建可点击链接&lt;/p&gt;
+&lt;p&gt;进入博客目录执行&lt;/p&gt;
+&lt;figure 
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>进程管理工具htop</title>
+    <link href="http://yoursite.com/2020/06/04/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7htop/"/>
+    <id>http://yoursite.com/2020/06/04/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7htop/</id>
+    <published>2020-06-04T03:05:27.621Z</published>
+    <updated>2017-09-11T09:20:51.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>进程管理工具htop</p><p>1、 安装htop<br><a href="https://hisham.hm/htop/index.php?page=downloads#sources">https://hisham.hm/htop/index.php?page=downloads#sources</a></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf htop-2.0.2.tar.gz</span><br><span class="line">mv htop-2.0.2 htop</span><br><span class="line">cd htop&#x2F;</span><br><span class="line">.&#x2F;configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure><p>说明：</p><ul><li>执行configure时可能遇到如下错误：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure: error: You may want to use --disable-unicode or install libncursesw.</span><br></pre></td></tr></table></figure>需要安装libncursesw<br>ncurses包的作用：提供字符终端处理库，包括面板和菜单。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libncursesw5</span><br></pre></td></tr></table></figure></li><li>默认情况下make install会安装到/usr/local，用于更改路径使用./configure –prefix=/some/path。</li></ul>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;进程管理工具htop&lt;/p&gt;
+&lt;p&gt;1、 安装htop&lt;br&gt;&lt;a href=&quot;https://hisham.hm/htop/index.php?page=downloads#sources&quot;&gt;https://hisham.hm/htop/index.php?page=do
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>收藏</title>
+    <link href="http://yoursite.com/2020/06/04/%E6%94%B6%E8%97%8F/"/>
+    <id>http://yoursite.com/2020/06/04/%E6%94%B6%E8%97%8F/</id>
+    <published>2020-06-04T03:05:27.583Z</published>
+    <updated>2018-06-04T13:30:27.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>创建步骤</title>
+    <link href="http://yoursite.com/2020/06/04/%E5%88%9B%E5%BB%BA/"/>
+    <id>http://yoursite.com/2020/06/04/%E5%88%9B%E5%BB%BA/</id>
+    <published>2020-06-04T03:05:27.580Z</published>
+    <updated>2017-08-06T07:40:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>参考：<a href="http://www.jianshu.com/p/1656489eff01">http://www.jianshu.com/p/1656489eff01</a><br>1、安装node.js(windows)</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>发布文章：</p><ol><li>cd /d/ProgramFiles/GitHub/myqzf</li><li>hexo clean</li><li>hexo generate</li><li>hexo deploy<br>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;参考：&lt;a href=&quot;http://www.jianshu.com/p/1656489eff01&quot;&gt;http://www.jianshu.com/p/1656489eff01&lt;/a&gt;&lt;br&gt;1、安装node.js(windows)&lt;/p&gt;
+&lt;h2 id=&quot;Quick-St
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>其它</title>
+    <link href="http://yoursite.com/2020/06/04/%E5%85%B6%E5%AE%83/"/>
+    <id>http://yoursite.com/2020/06/04/%E5%85%B6%E5%AE%83/</id>
+    <published>2020-06-04T03:05:27.561Z</published>
+    <updated>2018-06-10T13:34:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>查看java的并发数：netstat -np|grep java|wc -l</p><p>两文件夹同步： rsync -ru –progress –delete /opt/rsync_test/f1/ /opt/rsync_test/f2/</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;查看java的并发数：netstat -np|grep java|wc -l&lt;/p&gt;
+&lt;p&gt;两文件夹同步： rsync -ru –progress –delete /opt/rsync_test/f1/ /opt/rsync_test/f2/&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>jenkins</title>
+    <link href="http://yoursite.com/2020/06/04/jenkins/"/>
+    <id>http://yoursite.com/2020/06/04/jenkins/</id>
+    <published>2020-06-04T03:05:27.503Z</published>
+    <updated>2019-11-06T07:32:31.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>在构建服务器安装一个jinkins 服务<br>在本机部署安装Jenkins很简单，但要在一个合适的构建服务器上安装Jenkins就需要稍微布置一下了。  </p><p>在Linux上安装Jenkins，好的做法是为Jenkins常见一个用户和用户组，这使得在监控构建所使用的系统资源及排查问题构建更方便。 </p><p>两种安装启动方式<br>##一、Jenkins用户war包启动</p><h3 id="准备构建服务器"><a href="#准备构建服务器" class="headerlink" title="准备构建服务器"></a>准备构建服务器</h3><p>1、创建Jenkins用户及用户组。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd build</span><br><span class="line">$ sudo useradd --create-home --shell &#x2F;bin&#x2F;bash --groups build jenkins</span><br></pre></td></tr></table></figure><p>2、为Jenkins用户配置环境变量<br>vim /home/jenkins/.bashrc</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;java&#x2F;jdk1.8.0_101</span><br><span class="line">export PATH&#x3D;$JAVA_HOME&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure><p>这样就可以在独立的环境中使用jenkins这个用户运行Jenkins了。  </p><h4 id="Jenkins主目录"><a href="#Jenkins主目录" class="headerlink" title="Jenkins主目录"></a>Jenkins主目录</h4><p>无论把war文件放在哪儿，Jenkins在运行服务后都会把它所有重要的数据放在一个专用的、隔离的Jenkins目录下。<br>会存储关于构建服务器的配置信息、构建作业、构建产物、插件和一些其他的信息。<br>默认情况下Jenkins主目录在当前用户主目录下的.jenkins。<br>可以通过定义JENKINS_HONME环境变量改变Jenkins的主目录</p><h3 id="以jenkins用户启动Jenkins"><a href="#以jenkins用户启动Jenkins" class="headerlink" title="以jenkins用户启动Jenkins"></a>以jenkins用户启动Jenkins</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su - jenkins</span><br><span class="line">$ java -jar &#x2F;usr&#x2F;local&#x2F;jenkins&#x2F;jenkins.war</span><br></pre></td></tr></table></figure><p>其他参数：–httpPort=8080<br>          –prefix=jenkins<br>          –daemon<br>          –logfile=/var/logs/jenkins.log</p><p>##二、安装为服务</p><h3 id="在debian或ubuntu上安装Jenkins"><a href="#在debian或ubuntu上安装Jenkins" class="headerlink" title="在debian或ubuntu上安装Jenkins"></a>在debian或ubuntu上安装Jenkins</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget -q -O - https:&#x2F;&#x2F;pkg.jenkins.io&#x2F;debian&#x2F;jenkins.io.key | sudo apt-key add -</span><br><span class="line">$ sudo sh -c &#39;echo deb http:&#x2F;&#x2F;pkg.jenkins.io&#x2F;debian-stable binary&#x2F; &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;jenkins.list&#39;</span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install jenkins</span><br></pre></td></tr></table></figure><p>这种方式把Jenkins安装成一个服务，在/etc/init.d/jenkins配置了启动脚本。<br>同时有一个相应的系统用户名‘jenkins’。<br>Jenkins的主目录为/var/lib/jenkins。<br>日志文件在/var/log/jenkins/jenkins.log。<br>调整配置参数在/etc/default/jenkins。  </p><p>其他安装参考：<a href="https://jenkins.io/doc/book/installing/">jenkins_install</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;在构建服务器安装一个jinkins 服务&lt;br&gt;在本机部署安装Jenkins很简单，但要在一个合适的构建服务器上安装Jenkins就需要稍微布置一下了。  &lt;/p&gt;
+&lt;p&gt;在Linux上安装Jenkins，好的做法是为Jenkins常见一个用户和用户组，这使得在监控构建所使
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>Hello World</title>
     <link href="http://yoursite.com/2020/06/04/hello-world/"/>
     <id>http://yoursite.com/2020/06/04/hello-world/</id>
     <published>2020-06-04T02:27:11.575Z</published>
-    <updated>2020-06-04T02:27:11.575Z</updated>
+    <updated>2017-07-30T08:37:25.000Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>]]></content>
     
     <summary type="html">
     
@@ -35,6 +265,269 @@
     </summary>
     
     
+    
+  </entry>
+  
+  <entry>
+    <title>前端文件更新方案</title>
+    <link href="http://yoursite.com/2020/05/23/Jenkins/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/"/>
+    <id>http://yoursite.com/2020/05/23/Jenkins/%E5%89%8D%E7%AB%AF%E6%96%87%E4%BB%B6%E6%9B%B4%E6%96%B0%E6%96%B9%E6%A1%88/</id>
+    <published>2020-05-22T16:00:00.000Z</published>
+    <updated>2020-05-23T06:38:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>前端文件(除index.html在服务器nginx下)存储在七牛中。</p><p>通过samba进行各项目前端文件的暂存。之后由jenkins各项目分别调取，然后上传至七牛及服务器。</p><p>jenkins相关配置</p><p><img src="https://image.suning.cn/uimg/ZR/share_order/159021459572363946.jpg" alt=""></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">QINIUPREFIX=xaxy  <span class="comment">#七牛前缀</span></span><br><span class="line">FILE_DIR=/ssdb2/share/front/qiniu/xaxy</span><br><span class="line"></span><br><span class="line">UNPACK_DIR=<span class="variable">$FILE_DIR</span>/unpack   <span class="comment">#解压输出目录</span></span><br><span class="line">PROJECT_DIR=<span class="variable">$WORKSPACE</span>/<span class="variable">$QINIUPREFIX</span>  <span class="comment">#上传文件目录</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$FILE_DIR</span></span><br><span class="line">zipCnt=`ls -l |grep <span class="string">"^-"</span>|wc -l`</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"zipCnt=<span class="variable">$zipCnt</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$zipCnt</span>"</span> -eq <span class="string">"1"</span> ];<span class="keyword">then</span></span><br><span class="line">   cp <span class="variable">$FILE_DIR</span>/* /ssdb2/share/front/backup/    <span class="comment">#备份</span></span><br><span class="line">   zipName=`find *.zip`</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"zipName=<span class="variable">$zipName</span>"</span></span><br><span class="line">   unzip <span class="variable">$zipName</span> -d <span class="variable">$UNPACK_DIR</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"压缩文件存在 <span class="variable">$zipCnt</span> 个，构建退出"</span></span><br><span class="line">   <span class="built_in">set</span> -e <span class="comment">#注意，一定要先设置这个</span></span><br><span class="line">   <span class="built_in">exit</span> 1  <span class="comment">#然后再退出，jenkins就会报红显示构建失败</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$WORKSPACE</span></span><br><span class="line">rm -r <span class="variable">$PROJECT_DIR</span>/</span><br><span class="line">mkdir <span class="variable">$PROJECT_DIR</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$UNPACK_DIR</span>/*/</span><br><span class="line">cp -r ./ <span class="variable">$PROJECT_DIR</span></span><br><span class="line">rm -r <span class="variable">$FILE_DIR</span>/*     <span class="comment">#清空目录，注意：删除高危操作！！！！</span></span><br></pre></td></tr></table></figure><p><img src="https://image.suning.cn/uimg/ZR/share_order/159021517887493234.jpg" alt=""></p><p>文件路径填写七牛前缀名。</p><p>要上传到的 bucket填写要上传至七牛空间名</p><p>下面是把index.html上传至的服务器目录。</p><p>由于项目是在太多，更新上传前端很多时非常费时，又容易出差错。</p><p>所以进行了改良，前端文件包名都带有(xx七牛前缀名)，所以把前端文件上传至统一目录，然后根据包上的前缀名，进行提取。</p><p><img src="https://image.suning.cn/uimg/ZR/share_order/159021577046034241.jpg" alt=""></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">QINIUPREFIX=<span class="variable">$qiniuPrefix</span> </span><br><span class="line">FILE_DIR=/ssdb2/share/front/update</span><br><span class="line">UNPACK_DIR=<span class="variable">$FILE_DIR</span>/unpack/<span class="variable">$QINIUPREFIX</span>   <span class="comment">#解压输出目录</span></span><br><span class="line">PROJECT_DIR=<span class="variable">$WORKSPACE</span>/<span class="variable">$QINIUPREFIX</span>  <span class="comment">#上传文件目录</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$FILE_DIR</span></span><br><span class="line">zipCnt=`find *<span class="variable">$QINIUPREFIX</span>*.zip |wc -l`</span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"<span class="variable">$zipCnt</span>"</span> -eq <span class="string">"1"</span> ];<span class="keyword">then</span></span><br><span class="line">   zipName=`find *<span class="variable">$QINIUPREFIX</span>*.zip`</span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"zipName=<span class="variable">$zipName</span>"</span></span><br><span class="line">   mkdir -p <span class="variable">$UNPACK_DIR</span></span><br><span class="line">   unzip <span class="variable">$zipName</span> -d <span class="variable">$UNPACK_DIR</span></span><br><span class="line">   mv <span class="variable">$FILE_DIR</span>/<span class="variable">$zipName</span> /ssdb2/share/front/backup/    <span class="comment">#备份</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">   <span class="built_in">echo</span> <span class="string">"压缩文件存在 <span class="variable">$zipCnt</span> 个，构建退出"</span></span><br><span class="line">   <span class="built_in">set</span> -e <span class="comment">#注意，一定要先设置这个</span></span><br><span class="line">   <span class="built_in">exit</span> 1  <span class="comment">#然后再退出，jenkins就会报红显示构建失败</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$WORKSPACE</span></span><br><span class="line">rm -r <span class="variable">$PROJECT_DIR</span>/</span><br><span class="line">mkdir <span class="variable">$PROJECT_DIR</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$UNPACK_DIR</span>/*/</span><br><span class="line">cp -r ./ <span class="variable">$PROJECT_DIR</span></span><br><span class="line">rm -r <span class="variable">$UNPACK_DIR</span>/*   <span class="comment">#清空目录，注意：删除高危操作！！！！</span></span><br><span class="line"><span class="comment">##rm -r $FILE_DIR/*</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;前端文件(除index.html在服务器nginx下)存储在七牛中。&lt;/p&gt;
+&lt;p&gt;通过samba进行各项目前端文件的暂存。之后由jenkins各项目分别调取，然后上传至七牛及服务器。&lt;/p&gt;
+&lt;p&gt;jenkins相关配置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://
+      
+    
+    </summary>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/categories/Jenkins/"/>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>echo-nginx-module模块</title>
+    <link href="http://yoursite.com/2020/04/29/nginx/echo-nginx-module%E6%A8%A1%E5%9D%97/"/>
+    <id>http://yoursite.com/2020/04/29/nginx/echo-nginx-module%E6%A8%A1%E5%9D%97/</id>
+    <published>2020-04-28T16:00:00.000Z</published>
+    <updated>2020-04-30T07:07:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<p> 使用 Nginx Upload Module 实现上传文件功能</p><p>下载nginx及echo-nginx-module模块</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> wget http://nginx.org/download/nginx-1.16.1.tar.gz</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> wget https://github.com/openresty/<span class="built_in">echo</span>-nginx-module/archive/v0.61.tar.gz</span></span><br></pre></td></tr></table></figure><p>编译执行nginx</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ./configure --prefix=/usr/<span class="built_in">local</span>/nginx --with-http_ssl_module --add-module=/usr/<span class="built_in">local</span>/src/nginx/<span class="built_in">echo</span>-nginx-module-0.61 --add-module=/usr/<span class="built_in">local</span>/src/nginx/nginx-upload-module-2.3.0</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --with-http_ssl_module  开启SSL模块   --add-module添加附加模块   nginx_upload_module模块</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> make install  <span class="comment">#注意如果之前安装过，不要make install</span></span></span><br></pre></td></tr></table></figure><p>配置</p><p>nginx-upload.conf</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#echo-nginx-module module</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">location</span> /sub &#123;</span><br><span class="line">           <span class="attribute">echo</span> <span class="string">"querystring: <span class="variable">$query_string</span>"</span>;</span><br><span class="line">           <span class="attribute">echo</span> <span class="string">"method: <span class="variable">$echo_request_method</span>"</span>;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure><p>在浏览器请求 <a href="http://localhost/sub?name=11">http://localhost/sub?name=11</a></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#输出</span></span><br><span class="line">querystring: name=11</span><br><span class="line">method: GET</span><br></pre></td></tr></table></figure><p>如果请求后nginx把响应作为未知类型的文件保存，可以指定一下Content-Type： <code>default_type text/plain;</code></p><p>配置参数参考：<a href="https://github.com/openresty/echo-nginx-module/">echo-nginx-module</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; 使用 Nginx Upload Module 实现上传文件功能&lt;/p&gt;
+&lt;p&gt;下载nginx及echo-nginx-module模块&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pr
+      
+    
+    </summary>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx在请求路径中修改字符串</title>
+    <link href="http://yoursite.com/2020/04/28/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E5%9C%A8%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84%E4%B8%AD%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E4%B8%B2/"/>
+    <id>http://yoursite.com/2020/04/28/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E5%9C%A8%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84%E4%B8%AD%E4%BF%AE%E6%94%B9%E5%AD%97%E7%AC%A6%E4%B8%B2/</id>
+    <published>2020-04-27T16:00:00.000Z</published>
+    <updated>2020-04-30T10:04:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>nginx在请求路径后加字符串</p><p>需求一：<a href="http://192.168.1.113:8080/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a.m3u8，你能跟我转发给：http://192.168.1.113:8080/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a么？就是播放要认后缀名.m3u8，而我们系统没有用后缀。">http://192.168.1.113:8080/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a.m3u8，你能跟我转发给：http://192.168.1.113:8080/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a么？就是播放要认后缀名.m3u8，而我们系统没有用后缀。</a></p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> <span class="regexp">~* /playhls/(.*)</span>  &#123;</span><br><span class="line">              <span class="attribute">set</span> <span class="variable">$suffix</span> <span class="string">".m3u8"</span>;</span><br><span class="line">              <span class="attribute">if</span> (<span class="variable">$request_uri</span> !<span class="regexp">~*  /(.*)\.m3u8$)</span> &#123;</span><br><span class="line">                    <span class="attribute">rewrite</span> <span class="regexp"> ^/(.*)$</span>   http://<span class="variable">$server_name</span><span class="variable">$request_uri</span><span class="variable">$suffix</span>;</span><br><span class="line">                &#125;</span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure><p><a href="https://www.cnblogs.com/xiaoleiel/p/8308492.html">nginx$参数</a></p><p>需求二：把/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a.m3u8  转发到/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a</p><p>即前端要用playhls/xxx.m3u8，转到后台是playhls/xxx</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> <span class="regexp">~* /playhls/(.*)</span>  &#123;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$request_uri</span> <span class="regexp">~*  (/.*)\.m3u8$)</span> &#123;</span><br><span class="line">                     <span class="attribute">set</span> <span class="variable">$repath</span> <span class="variable">$1</span>;</span><br><span class="line">                     <span class="comment">#echo $repath;</span></span><br><span class="line">                     <span class="attribute">rewrite</span><span class="regexp"> ^/(.*)$</span> <span class="variable">$repath</span> <span class="literal">break</span>;</span><br><span class="line">                     <span class="attribute">proxy_pass</span>    http://192.168.1.101:8088;</span><br><span class="line">                 <span class="comment"># rewrite  ^/(.*)$   http://$server_name$repath;</span></span><br><span class="line">         &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>1、先用正则<code>(/.*)\.m3u8$</code>匹配到<code>/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a.m3u8</code></p><p>2、然后把括号中截取到的字符<code>/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a</code> 赋值给变量<code>$repath</code> , $1表示第一个括号内匹配的正则参数。</p><p>3、然后用<code>rewrite</code> 修改 $uri。</p><p>4、最后<code>proxy_pass</code>按路径<code>/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a</code>转发到 <code>http://192.168.1.101:8088</code></p><p>注意 rewrite 要有个重新匹配 location 的副作用。由于 proxy_pass 的处理阶段比 location 处理更晚，所以这里需要 break 掉，以防止 rewrite 进入下一次 location 匹配而丢失 proxy_pass。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;nginx在请求路径后加字符串&lt;/p&gt;
+&lt;p&gt;需求一：&lt;a href=&quot;http://192.168.1.113:8080/cpnsp/ws/playhls/4f2ef26002aa4b0b8990e1503abe624a.m3u8，你能跟我转发给：http://192.1
+      
+    
+    </summary>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="nginx配置" scheme="http://yoursite.com/tags/nginx%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java服务CPU占用高</title>
+    <link href="http://yoursite.com/2020/04/20/%E5%B7%A5%E4%BD%9C/java%E6%9C%8D%E5%8A%A1CPU%E5%8D%A0%E7%94%A8%E9%AB%98/"/>
+    <id>http://yoursite.com/2020/04/20/%E5%B7%A5%E4%BD%9C/java%E6%9C%8D%E5%8A%A1CPU%E5%8D%A0%E7%94%A8%E9%AB%98/</id>
+    <published>2020-04-19T16:00:00.000Z</published>
+    <updated>2020-04-22T13:42:30.050Z</updated>
+    
+    <content type="html"><![CDATA[<p> 由上篇内存占用过高，未定位到准确的问题，今天某时段服务的CPU突然占用高，或许是引起内存占用的元凶。</p><p>①通过top找到占用cpu最高的 <strong>pid[进程id]</strong></p><p>通过Shift+P按CUP排序，定位到pid是 13748</p><p>②通过 <strong>top -Hp pid</strong> 查看进程中占用cpu过高的 <strong>tid[线程id]</strong></p><p><img src="https://pic.images.ac.cn/image/5e9da7a169a9f" alt=""></p><p>占用cpu过高的线程有五个，以其中一个线程做示例</p><p>③通过 <strong>printf  ‘%x/n’ tid</strong>  把线程id转化为十六进制</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">printf</span> <span class="string">'%x/n'</span> 13796</span></span><br><span class="line">35e4</span><br></pre></td></tr></table></figure><p>④通过 <strong>jstack pid | grep tid -A 50</strong> 定位线程堆栈信息</p><p><img src="https://pic.images.ac.cn/image/5e9da8122ba46" alt=""></p><p> ⑤ 根据堆栈信息就可以定位代码</p><p><img src="https://pic.images.ac.cn/image/5e9da8487fe17" alt=""></p><p>发现occupationIds进行了无限循环。</p><p>⑥同样把剩余的4个线程分析下也是此原因</p><p>之前通过dump线上环境的JVM内存进行分析，有此方法的影子，但是并不能完全确定。</p><p>在网上看到一个较快定位问题请求的方法(<a href="https://www.sohu.com/a/233984305_355142">JVM 堆内存使用率持续上升的一种排查思路</a>) ，直接在nginx日志中搜索响应码为504的请求，然后看日志时间是否与内存或CPU上升时间点吻合，分析504的请求，确认是否存在死循环。504响应码为网关超时，当一个请求到Tomcat后，tomcat如果陷入死循环，那么这个请求自然无法得到响应，nginx等待响应超时，响应给用户504。</p><p>参考：<a href="https://zhuanlan.zhihu.com/p/69342660">https://zhuanlan.zhihu.com/p/69342660</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; 由上篇内存占用过高，未定位到准确的问题，今天某时段服务的CPU突然占用高，或许是引起内存占用的元凶。&lt;/p&gt;
+&lt;p&gt;①通过top找到占用cpu最高的 &lt;strong&gt;pid[进程id]&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;通过Shift+P按CUP排序，定位到pid是 137
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>java服务内存占用定位</title>
+    <link href="http://yoursite.com/2020/04/19/%E5%B7%A5%E4%BD%9C/java%E6%9C%8D%E5%8A%A1%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E5%AE%9A%E4%BD%8D/"/>
+    <id>http://yoursite.com/2020/04/19/%E5%B7%A5%E4%BD%9C/java%E6%9C%8D%E5%8A%A1%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E5%AE%9A%E4%BD%8D/</id>
+    <published>2020-04-18T16:00:00.000Z</published>
+    <updated>2020-05-09T02:07:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<p> top部分交互命令</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">c:  显示完整的命令</span><br><span class="line">d： 更改刷新频率</span><br><span class="line">P： 根据CPU资源使用大小进行排序</span><br><span class="line">M： 根据内存资源使用大小进行排序</span><br></pre></td></tr></table></figure><p> 通过jinfo查看JVM启动信息</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看内存占用，rsz为实际内存，单位kb</span></span><br><span class="line"><span class="comment"># ps -eo 'pid,rsz,vsz' |grep pid</span></span><br><span class="line">$ ps -eo <span class="string">'pid,rsz,vsz'</span> |grep 27843</span><br><span class="line">27843 1684668 12343528</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看系统信息</span></span><br><span class="line"><span class="comment"># jinfo -sysprops pid</span></span><br><span class="line">$ jinfo -sysprops 27843</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看JVM信息</span></span><br><span class="line"><span class="comment"># jinfo -flags pid</span></span><br><span class="line">$ jinfo -flags 27843</span><br><span class="line">Attaching to process ID 27843, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.231-b11</span><br><span class="line">Non-default VM flags: -XX:CICompilerCount=3 -XX:InitialHeapSize=528482304 -XX:+ManagementServer -XX:MaxHeapSize=8434745344 -XX:MaxNewSize=2811232256 -XX:MinHeapDeltaBytes=524288 -XX:NewSize=176160768 -XX:OldSize=352321536 -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:+UseParallelGC</span><br><span class="line">Command line: ...</span><br></pre></td></tr></table></figure><p> 通过jmap查看堆内存</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># jmap -heap pid</span></span><br><span class="line">$ jmap -heap 497</span><br><span class="line">Attaching to process ID 497, please <span class="built_in">wait</span>...</span><br><span class="line">Debugger attached successfully.</span><br><span class="line">Server compiler detected.</span><br><span class="line">JVM version is 25.221-b11</span><br><span class="line"></span><br><span class="line">using thread-local object allocation.</span><br><span class="line">Parallel GC with 4 thread(s)</span><br><span class="line"></span><br><span class="line">Heap Configuration:</span><br><span class="line">   MinHeapFreeRatio         = 0</span><br><span class="line">   MaxHeapFreeRatio         = 100</span><br><span class="line">   MaxHeapSize              = 8434745344 (8044.0MB)</span><br><span class="line">   NewSize                  = 176160768 (168.0MB)</span><br><span class="line">   MaxNewSize               = 2811232256 (2681.0MB)</span><br><span class="line">   OldSize                  = 352321536 (336.0MB)</span><br><span class="line">   NewRatio                 = 2</span><br><span class="line">   SurvivorRatio            = 8</span><br><span class="line">   MetaspaceSize            = 21807104 (20.796875MB)</span><br><span class="line">   CompressedClassSpaceSize = 1073741824 (1024.0MB)</span><br><span class="line">   MaxMetaspaceSize         = 17592186044415 MB</span><br><span class="line">   G1HeapRegionSize         = 0 (0.0MB)</span><br><span class="line"></span><br><span class="line">Heap Usage:</span><br><span class="line">PS Young Generation</span><br><span class="line">Eden Space:</span><br><span class="line">   capacity = 1774190592 (1692.0MB)</span><br><span class="line">   used     = 156138392 (148.9051742553711MB)</span><br><span class="line">   free     = 1618052200 (1543.094825744629MB)</span><br><span class="line">   8.800542213674415% used</span><br><span class="line">From Space:</span><br><span class="line">   capacity = 1048576 (1.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 1048576 (1.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">To Space:</span><br><span class="line">   capacity = 1048576 (1.0MB)</span><br><span class="line">   used     = 0 (0.0MB)</span><br><span class="line">   free     = 1048576 (1.0MB)</span><br><span class="line">   0.0% used</span><br><span class="line">PS Old Generation</span><br><span class="line">   capacity = 606601216 (578.5MB)</span><br><span class="line">   used     = 90496000 (86.3037109375MB)</span><br><span class="line">   free     = 516105216 (492.1962890625MB)</span><br><span class="line">   14.91853257346586% used</span><br><span class="line"></span><br><span class="line">47600 interned Strings occupying 4865784 bytes.</span><br></pre></td></tr></table></figure><p>dump内存，使用jvisualvm分析</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># jmap -dump:format=b,file=file.dump pid</span></span><br><span class="line">$ jmap -dump:format=b,file=497.dump 497</span><br></pre></td></tr></table></figure><p>将dump文件导入jvisualvm,在堆中包含的类中，逐步展开至实例。</p><p>堆内存分析 <a href="https://heaphero.io/">https://heaphero.io/</a></p><p><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/index.html">https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/index.html</a></p><p>参考：<a href="https://zhuanlan.zhihu.com/p/73727459">https://zhuanlan.zhihu.com/p/73727459</a></p><p>相关：<a href="https://www.v2ex.com/t/669244">https://www.v2ex.com/t/669244</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; top部分交互命令&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/sp
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通过URL触发Jenkins构建</title>
+    <link href="http://yoursite.com/2020/04/17/Jenkins/%E9%80%9A%E8%BF%87URL%E8%A7%A6%E5%8F%91Jenkins%E6%9E%84%E5%BB%BA/"/>
+    <id>http://yoursite.com/2020/04/17/Jenkins/%E9%80%9A%E8%BF%87URL%E8%A7%A6%E5%8F%91Jenkins%E6%9E%84%E5%BB%BA/</id>
+    <published>2020-04-16T16:00:00.000Z</published>
+    <updated>2020-05-09T02:07:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://www.cnblogs.com/tyrionyang/p/8183819.html">https://www.cnblogs.com/tyrionyang/p/8183819.html</a></p><p>几个插件：<a href="https://www.jianshu.com/p/0457aba7efcf">https://www.jianshu.com/p/0457aba7efcf</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/tyrionyang/p/8183819.html&quot;&gt;https://www.cnblogs.com/tyrionyang/p/8183819.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;几个插件：&lt;a href=&quot;ht
+      
+    
+    </summary>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/categories/Jenkins/"/>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>jvisualvm远程监控JVM</title>
+    <link href="http://yoursite.com/2020/04/15/%E5%B7%A5%E4%BD%9C/jvisualvm%E8%BF%9C%E7%A8%8B%E7%9B%91%E6%8E%A7JVM/"/>
+    <id>http://yoursite.com/2020/04/15/%E5%B7%A5%E4%BD%9C/jvisualvm%E8%BF%9C%E7%A8%8B%E7%9B%91%E6%8E%A7JVM/</id>
+    <published>2020-04-14T16:00:00.000Z</published>
+    <updated>2020-04-15T10:56:13.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>jvm进程启动项配置</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> nohup /usr/<span class="built_in">local</span>/java/jdk1.8.0_231/bin/java -Djava.rmi.server.hostname=192.168.1.80 -Dcom.sun.management.jmxremote.port=1100 -Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span> -Dcom.sun.management.jmxremote.authenticate=<span class="literal">true</span> -Dcom.sun.management.jmxremote.password.file=/ssdb1/bootserver/jmxremote.passwd -Dcom.sun.management.jmxremote.access.file=/ssdb1/bootserver/jmxremote.access -jar /ssdb1/bootserver/boot8100/cpnspcms/cpnsp-api-1.0.0-SNAPSHOT.jar --server.port=8100 --name=cpnspcms_box &gt; 8100.log 2&gt;&amp;1 &amp;</span></span><br></pre></td></tr></table></figure><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-Djava.rmi.server.hostname&#x3D;192.168.1.80  # 配置远程服务IP</span><br><span class="line">-Dcom.sun.management.jmxremote.port&#x3D;1100 # 配置远程 connection 的端口号</span><br><span class="line">-Dcom.sun.management.jmxremote.ssl&#x3D;false # 是否启用 ssl</span><br><span class="line">-Dcom.sun.management.jmxremote.authenticate&#x3D;true  # 是否启用鉴权（需要用户名，密码鉴权）</span><br><span class="line">-Dcom.sun.management.jmxremote.password.file&#x3D;&#x2F;ssdb1&#x2F;bootserver&#x2F;jmxremote.passwd </span><br><span class="line">-Dcom.sun.management.jmxremote.access.file&#x3D;&#x2F;ssdb1&#x2F;bootserver&#x2F;jmxremote.access</span><br></pre></td></tr></table></figure><p>如果authenticate=false的时候不需要配置jmxremote.passwd 和jmxremote.access</p><p>否则需要在jmxremote.access中指定用户名和读写权限</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">monitorRole readonly</span><br><span class="line">controlRole readwrite</span><br></pre></td></tr></table></figure><p>jmxremote.passwd中指定用户名和密码，格式如</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">monitorRole tomcat</span><br><span class="line">controlRole tomcat</span><br></pre></td></tr></table></figure><p>设置文件权限</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> chmod 400 jmxremote.access</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> chmod 400 jmxremote.passwd</span></span><br></pre></td></tr></table></figure><p>然后在jvisualvm添加JMX连接。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;jvm进程启动项配置&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;co
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx配置文件中if多重判断</title>
+    <link href="http://yoursite.com/2020/03/29/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E4%B8%ADif%E5%8F%8C%E9%87%8D%E5%88%A4%E6%96%AD/"/>
+    <id>http://yoursite.com/2020/03/29/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E4%B8%ADif%E5%8F%8C%E9%87%8D%E5%88%A4%E6%96%AD/</id>
+    <published>2020-03-28T16:00:00.000Z</published>
+    <updated>2020-03-29T01:03:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>nginx配置文件中if多重判断</p><p>Nginx不支持 and、or、&amp;&amp;、|| 这类语法；且不支持if的多重嵌套。</p><h5 id="实现方法一"><a href="#实现方法一" class="headerlink" title="实现方法一"></a>实现方法一</h5><p>每个域名配置单独的server{}，这样配置比较简明；但缺点是配置文件会写很长，要修改多次。（比较啰嗦）。</p><h5 id="实现方法二"><a href="#实现方法二" class="headerlink" title="实现方法二"></a>实现方法二</h5><p>全部域名配置一个server{}，进行多重判断；这样配置可能稍微复杂一点，但配置文件不会那么啰嗦。</p><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">server&#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> xzjps.bjcscn.com hncszj.bjupi.com;</span><br><span class="line">    <span class="attribute">root</span>   html/unitrecordO_zjps;</span><br><span class="line">    <span class="attribute">index</span>    index.html;</span><br><span class="line"></span><br><span class="line">   <span class="attribute">location</span> = /&#123;</span><br><span class="line">               <span class="attribute">set</span> <span class="variable">$flag</span> <span class="number">0</span>;</span><br><span class="line">               <span class="attribute">if</span> (<span class="variable">$host</span> = <span class="string">"hncszj.bjupi.com"</span>)&#123;</span><br><span class="line">                    <span class="attribute">set</span> <span class="variable">$flag</span> <span class="string">"<span class="variable">$&#123;flag&#125;</span>1"</span>;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="attribute">if</span> (<span class="variable">$query_string</span> !<span class="regexp">~*  ^(.*)userGroup=(.*)$)</span>&#123;</span><br><span class="line">                   <span class="attribute">set</span> <span class="variable">$flag</span> <span class="string">"<span class="variable">$&#123;flag&#125;</span>2"</span>;</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="attribute">if</span> (<span class="variable">$flag</span> <span class="regexp">~* "012")</span>&#123;</span><br><span class="line">                    <span class="attribute">rewrite</span><span class="regexp"> ^/(.*)$</span>  http://hncszj.bjupi.com/?userGroup=41 <span class="literal">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果满足条件一并同时也满足条件二,就重定向到http://hncszj.bjupi.com/?userGroup=41</span></span><br><span class="line">    </span><br><span class="line">  <span class="attribute">location</span> = /index.html &#123;</span><br><span class="line">               <span class="attribute">add_header</span> Cache-Control <span class="string">"no-cache no-store"</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">   <span class="attribute">location</span> /&#123;</span><br><span class="line">       <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ /index.html;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="attribute">location</span> /cpnsp/&#123;</span><br><span class="line">      <span class="attribute">proxy_connect_timeout</span>   <span class="number">3</span>;</span><br><span class="line">       <span class="attribute">proxy_send_timeout</span>      <span class="number">300</span>;</span><br><span class="line">      <span class="attribute">proxy_read_timeout</span>      <span class="number">300</span>;</span><br><span class="line">      <span class="attribute">proxy_pass</span>    http://urstrem3;</span><br><span class="line">      <span class="attribute">proxy_set_header</span>   REMOTE_ADDR  <span class="variable">$remote_addr</span>;</span><br><span class="line">       <span class="attribute">proxy_set_header</span>  Host  <span class="variable">$host</span>;</span><br><span class="line">       <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">       <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span>  /50x.html;</span><br><span class="line">    <span class="attribute">location</span> = /50x.html &#123;</span><br><span class="line">      <span class="attribute">root</span>    html;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;nginx配置文件中if多重判断&lt;/p&gt;
+&lt;p&gt;Nginx不支持 and、or、&amp;amp;&amp;amp;、|| 这类语法；且不支持if的多重嵌套。&lt;/p&gt;
+&lt;h5 id=&quot;实现方法一&quot;&gt;&lt;a href=&quot;#实现方法一&quot; class=&quot;headerlink&quot; title=&quot;实现方
+      
+    
+    </summary>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="nginx配置" scheme="http://yoursite.com/tags/nginx%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx配置文件中if多重判断</title>
+    <link href="http://yoursite.com/2020/03/29/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E4%B8%ADmax_fails%E5%92%8Cfail_timeout/"/>
+    <id>http://yoursite.com/2020/03/29/nginx/%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/nginx%E4%B8%ADmax_fails%E5%92%8Cfail_timeout/</id>
+    <published>2020-03-28T16:00:00.000Z</published>
+    <updated>2020-05-28T11:18:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">upstream</span> teststrem2 &#123;</span><br><span class="line">      <span class="attribute">server</span> <span class="number">127.0.0.1:8300</span> max_fails=<span class="number">1</span> fail_timeout=<span class="number">60s</span>;</span><br><span class="line">      <span class="attribute">server</span> <span class="number">127.0.0.1:8301</span> max_fails=<span class="number">1</span> fail_timeout=<span class="number">60s</span>;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><p>max_fails 、 fail_timeout 是Nginx的负载均衡检查模块中两个可选参数。用于判断后端节点状态。</p><p>Nginx基于连接探测，如果发现后端异常，在单位周期为fail_timeout设置的时间，中达到max_fails次数，这个周期次数内，如果后端同一个节点不可用，那么将把节点标记为不可用，并等待下一个周期（同样时常为fail_timeout）再一次去请求，判断是否连接是否成功。如果成功，将恢复之前的轮询方式，如果不可用将在下一个周期(fail_timeout)再试一次。</p><p>在两个节点都可用的情况下，突然有一个节点挂掉，客户端请求过来后哪怕请求到了不可用的节点，此次请求也不会失败，因为Nginx会把此次请求转发到另外一个可用节点，再把结果返回给客户端。<br>当一个节点挂掉，Nginx不知道节点是否恢复的时候，会把客户端的请求同时转发到两个节点，判断节点健康情况。</p><p>可用于解决之前刘问的问题，后端服务更新或者出现溢出，服务不可用时，导致前端桌面端卡死的情况。</p><p>参考：<a href="https://blog.51cto.com/kexiaoke/2316851">https://blog.51cto.com/kexiaoke/2316851</a></p><p>参考：<a href="https://blog.51cto.com/kexiaoke/2316851">https://blog.51cto.com/kexiaoke/2316851</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;figure class=&quot;highlight nginx&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/categories/nginx/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="nginx配置" scheme="http://yoursite.com/tags/nginx%E9%85%8D%E7%BD%AE/"/>
     
   </entry>
   
