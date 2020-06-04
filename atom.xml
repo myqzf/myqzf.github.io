@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-01-02T01:17:00.000Z</updated>
+  <updated>2020-05-23T06:38:24.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,258 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>工作/两路由局域网服务访问</title>
-    <link href="http://yoursite.com/2020/06/04/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/"/>
-    <id>http://yoursite.com/2020/06/04/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/</id>
-    <published>2020-06-04T03:05:32.231Z</published>
-    <updated>2020-01-02T01:17:00.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>两路由组建局域网，实现服务访问</p><h4 id="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"><a href="#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。" class="headerlink" title="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"></a>需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。</h4><p><a href="https://simimg.com/i/5HSuX"><img src="https://s1.simimg.com/2017/09/03/5HSuX.png" alt="5HSuX.png"></a></p><h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>  1、原有网络局域网现状<br>       主路由：网关：192.168.1.2<br>              子网掩码：255.255.255.0<br>              IP:192.168.1.xxx<br>        PC :  IP：192.168.1.101<br>             子网掩码：255.255.255.0<br>             网关：192.168.1.2<br>  2、副路由<br>      LAN口： IP:10.10.10.1<br>             子网掩码：255.0.0.0<br>      WAN口： IP:192.168.1.20<br>              子网掩码：255.255.255.0<br>              网关：192.168.1.2<br>  3、盒子<br>      IP:10.10.10.100<br>      子网掩码：255.0.0.0<br>      网关：10.10.10.1</p><h1 id="副路由-（TP-LINK）设置"><a href="#副路由-（TP-LINK）设置" class="headerlink" title="副路由 （TP-LINK）设置"></a>副路由 （TP-LINK）设置</h1><p>   1、路由通电后，通过浏览器访问路由地址（192.168.0.1）。<br>   2、LAN口设置：IP地址：10.10.10.1（可任意），子网掩码：255.0.0.0（根据IP定）。<br>   3、保存，重启路由。<br>   4、通过浏览器访问路由地址10.10.10.1<br>   5、WAN口设置<br>         模式：静态IP<br>         IP地址：192.168.1.20（在原局域网内不冲突即可，此IP用于盒子服务的访问）<br>         子网掩码：255.255.255.0<br>         网关：192.168.1.2<br>         DNS服务器：192.168.1.2<br>   6、虚拟服务器 端口映射 把80端口映射到盒子ip:10.10.10.100<br>   7、把网线从原路由LAN口连接到副路由WAN口。</p><h1 id="盒子服务安装及设置"><a href="#盒子服务安装及设置" class="headerlink" title="盒子服务安装及设置"></a>盒子服务安装及设置</h1><p>   1、安装好Tomcat及nginx服务。(注意：静态页面中IP要为动态获取。)<br>   2、修改nginx配置：监听80端口，转发到tomcat。<br>即可在PC上通过192.168.1.20访问盒子上的tomcat服务。</p><h1 id="下面实现可以域名访问"><a href="#下面实现可以域名访问" class="headerlink" title="下面实现可以域名访问"></a>下面实现可以域名访问</h1><p>前提：拥有主路由的管理权（要修改DNS）<br>   因要考虑在无网络的情况及不修改原有网络机器，所以在盒子上部署DNS服务器。<br>   1、在盒子上部署DNS服务器。（参考上篇：DNS主备服务）<br>   2、配置域名指向,域名指向的IP地址应为副路由WAN口地址（192.168.1.20）<br>   3、在副路由中配置DNS<br>      在虚拟服务器 端口映射添加记录，把53端口指向到盒子IP:10.10.10.100,协议为全部。<br>   4、在主路由中配置DNS<br>      在DHCP服务器中首选DNS输入192.168.1.20，备用DNS输入114.114.114.114<br>即可在PC上通过域名访问盒子上服务。</p><h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><p>如若在准备阶段就可给盒子分配一该网络下固定的IP，就可省去路由这一步。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;两路由组建局域网，实现服务访问&lt;/p&gt;
-&lt;h4 id=&quot;需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot;&gt;&lt;a href=&quot;#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot; class=&quot;headerlink&quot; ti
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>linux/命令/chattr与lsattr</title>
-    <link href="http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/chattr%E4%B8%8Elsattr/"/>
-    <id>http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/chattr%E4%B8%8Elsattr/</id>
-    <published>2020-06-04T03:05:30.649Z</published>
-    <updated>2018-06-01T10:10:05.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>chattr与lsattr</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;chattr与lsattr&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>linux/命令/adduser新增用户</title>
-    <link href="http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/"/>
-    <id>http://yoursite.com/2020/06/04/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/</id>
-    <published>2020-06-04T03:05:30.638Z</published>
-    <updated>2018-06-05T03:07:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>adduser新增用户</p><p>useradd新增用户比较复杂，可用adduser新增用户。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> adduser elastic</span></span><br><span class="line">Adding user `elastic' ...</span><br><span class="line">Adding new group `elastic' (1000) ...</span><br><span class="line">Adding new user `elastic' (1000) with group `elastic' ...</span><br><span class="line">Creating home directory `/home/elastic' ...</span><br><span class="line">Copying files from `/etc/skel' ...</span><br><span class="line">Enter new UNIX password:</span><br><span class="line">Retype new UNIX password:</span><br><span class="line">passwd: password updated successfully</span><br><span class="line">Changing the user information for elastic</span><br><span class="line">Enter the new value, or press ENTER for the default</span><br><span class="line">        Full Name []: elasticsearch</span><br><span class="line">        Room Number []:</span><br><span class="line">        Work Phone []:</span><br><span class="line">        Home Phone []:</span><br><span class="line">        Other []:</span><br><span class="line">Is the information correct? [Y/n] y</span><br></pre></td></tr></table></figure>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;adduser新增用户&lt;/p&gt;
-&lt;p&gt;useradd新增用户比较复杂，可用adduser新增用户。&lt;/p&gt;
-&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;lin
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>java/第三方授权-QQ</title>
-    <link href="http://yoursite.com/2020/06/04/java/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%88%E6%9D%83-QQ/"/>
-    <id>http://yoursite.com/2020/06/04/java/%E7%AC%AC%E4%B8%89%E6%96%B9%E6%8E%88%E6%9D%83-QQ/</id>
-    <published>2020-06-04T03:05:28.772Z</published>
-    <updated>2018-06-27T12:31:08.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>QQ第三方授权</p><ol><li><p>申请appid和appkey<br><a href="http://connect.qq.com/intro/login/">申请地址</a></p></li><li><p>获取授权<br> 在前台点击qq登录时去请求 </p></li></ol><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;authorize?response_type&#x3D;code&amp;client_id&#x3D;[YOUR_APPID]&amp;redirect_uri&#x3D;[YOUR_REDIRECT_URI]&amp;scope&#x3D;[THE_SCOPE]</span><br></pre></td></tr></table></figure><p>3、通过Authorization Code获取Access Token<br>通过回调获得的code 发送请求</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;token?grant_type&#x3D;authorization_code&amp;client_id&#x3D;</span><br></pre></td></tr></table></figure><p>[YOUR_APP_ID]&amp;client_secret=[YOUR_APP_Key]&amp;code=[The_AUTHORIZATION_CODE]&amp;state=[The_CLIENT_STATE]&amp;redirect_uri=[YOUR_REDIRECT_URI]</p><p>4、使用Access Token来获取用户的OpenID<br> 发送请求</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;oauth2.0&#x2F;me?access_token&#x3D;YOUR_ACCESS_TOKEN</span><br></pre></td></tr></table></figure><p>5、使用Access Token以及OpenID来访问用户数据</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;graph.qq.com&#x2F;user&#x2F;get_user_info?access_token&#x3D;YOUR_ACCESS_TOKEN&amp;oauth_consumer_key&#x3D;YOUR_APP_ID&amp;openid&#x3D;YOUR_OPENID</span><br></pre></td></tr></table></figure><p>参考文档：<a href="http://wiki.connect.qq.com/%e5%bc%80%e5%8f%91%e6%94%bb%e7%95%a5_server-side">http://wiki.connect.qq.com/%e5%bc%80%e5%8f%91%e6%94%bb%e7%95%a5_server-side</a></p><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN">微信第三方授权登录</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;QQ第三方授权&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;申请appid和appkey&lt;br&gt;&lt;a href=&quot;http://connect.qq.com/intro/login/&quot;&gt;申请地址&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;获取授权&lt;br&gt; 在前台点击qq登录时去请求 &lt;
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>hexo/相册功能</title>
-    <link href="http://yoursite.com/2020/06/04/hexo/%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD/"/>
-    <id>http://yoursite.com/2020/06/04/hexo/%E7%9B%B8%E5%86%8C%E5%8A%9F%E8%83%BD/</id>
-    <published>2020-06-04T03:05:28.458Z</published>
-    <updated>2018-06-04T13:30:38.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>hexo 增加相册功能</p><p>主题使用的 <a href="https://github.com/litten/hexo-theme-yilia">Yilia</a> 主题。</p><p>1、创建可点击链接</p><p>进入博客目录执行</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> hexo new page photos</span></span><br></pre></td></tr></table></figure><p>会在source下生成photos/index.md文件。然后在主题站点的配置文件themes/yilia/_config.yml中添加点击的文案和跳转到位置 。</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="string">主页:</span> <span class="string">/</span></span><br><span class="line">  <span class="string">文章:</span> <span class="string">/archives/</span></span><br><span class="line">  <span class="attr">categories:</span> <span class="string">/categories/</span></span><br><span class="line">  <span class="string">随笔:</span> <span class="string">/tags/随笔/</span></span><br><span class="line">  <span class="string">相册:</span> <span class="string">/photos/</span></span><br><span class="line">  <span class="attr">about:</span> <span class="string">/about</span></span><br></pre></td></tr></table></figure><p>参考：<a href="https://blog.csdn.net/qq_22656383/article/details/79393146">https://blog.csdn.net/qq_22656383/article/details/79393146</a></p><p><a href="https://github.com/maker997/backupBlog">https://github.com/maker997/backupBlog</a></p><p><a href="https://www.jianshu.com/p/370ca4ef808a">https://www.jianshu.com/p/370ca4ef808a</a></p><p><a href="https://github.com/luojinghui/luojinghui.github.io">https://github.com/luojinghui/luojinghui.github.io</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;hexo 增加相册功能&lt;/p&gt;
-&lt;p&gt;主题使用的 &lt;a href=&quot;https://github.com/litten/hexo-theme-yilia&quot;&gt;Yilia&lt;/a&gt; 主题。&lt;/p&gt;
-&lt;p&gt;1、创建可点击链接&lt;/p&gt;
-&lt;p&gt;进入博客目录执行&lt;/p&gt;
-&lt;figure 
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>进程管理工具htop</title>
-    <link href="http://yoursite.com/2020/06/04/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7htop/"/>
-    <id>http://yoursite.com/2020/06/04/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7htop/</id>
-    <published>2020-06-04T03:05:27.621Z</published>
-    <updated>2017-09-11T09:20:51.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>进程管理工具htop</p><p>1、 安装htop<br><a href="https://hisham.hm/htop/index.php?page=downloads#sources">https://hisham.hm/htop/index.php?page=downloads#sources</a></p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf htop-2.0.2.tar.gz</span><br><span class="line">mv htop-2.0.2 htop</span><br><span class="line">cd htop&#x2F;</span><br><span class="line">.&#x2F;configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure><p>说明：</p><ul><li>执行configure时可能遇到如下错误：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">configure: error: You may want to use --disable-unicode or install libncursesw.</span><br></pre></td></tr></table></figure>需要安装libncursesw<br>ncurses包的作用：提供字符终端处理库，包括面板和菜单。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install libncursesw5</span><br></pre></td></tr></table></figure></li><li>默认情况下make install会安装到/usr/local，用于更改路径使用./configure –prefix=/some/path。</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;进程管理工具htop&lt;/p&gt;
-&lt;p&gt;1、 安装htop&lt;br&gt;&lt;a href=&quot;https://hisham.hm/htop/index.php?page=downloads#sources&quot;&gt;https://hisham.hm/htop/index.php?page=do
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>收藏</title>
-    <link href="http://yoursite.com/2020/06/04/%E6%94%B6%E8%97%8F/"/>
-    <id>http://yoursite.com/2020/06/04/%E6%94%B6%E8%97%8F/</id>
-    <published>2020-06-04T03:05:27.583Z</published>
-    <updated>2018-06-04T13:30:27.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>创建步骤</title>
-    <link href="http://yoursite.com/2020/06/04/%E5%88%9B%E5%BB%BA/"/>
-    <id>http://yoursite.com/2020/06/04/%E5%88%9B%E5%BB%BA/</id>
-    <published>2020-06-04T03:05:27.580Z</published>
-    <updated>2017-08-06T07:40:44.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>参考：<a href="http://www.jianshu.com/p/1656489eff01">http://www.jianshu.com/p/1656489eff01</a><br>1、安装node.js(windows)</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>发布文章：</p><ol><li>cd /d/ProgramFiles/GitHub/myqzf</li><li>hexo clean</li><li>hexo generate</li><li>hexo deploy<br>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;参考：&lt;a href=&quot;http://www.jianshu.com/p/1656489eff01&quot;&gt;http://www.jianshu.com/p/1656489eff01&lt;/a&gt;&lt;br&gt;1、安装node.js(windows)&lt;/p&gt;
-&lt;h2 id=&quot;Quick-St
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>其它</title>
-    <link href="http://yoursite.com/2020/06/04/%E5%85%B6%E5%AE%83/"/>
-    <id>http://yoursite.com/2020/06/04/%E5%85%B6%E5%AE%83/</id>
-    <published>2020-06-04T03:05:27.561Z</published>
-    <updated>2018-06-10T13:34:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>查看java的并发数：netstat -np|grep java|wc -l</p><p>两文件夹同步： rsync -ru –progress –delete /opt/rsync_test/f1/ /opt/rsync_test/f2/</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;查看java的并发数：netstat -np|grep java|wc -l&lt;/p&gt;
-&lt;p&gt;两文件夹同步： rsync -ru –progress –delete /opt/rsync_test/f1/ /opt/rsync_test/f2/&lt;/p&gt;
-
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>jenkins</title>
-    <link href="http://yoursite.com/2020/06/04/jenkins/"/>
-    <id>http://yoursite.com/2020/06/04/jenkins/</id>
-    <published>2020-06-04T03:05:27.503Z</published>
-    <updated>2019-11-06T07:32:31.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>在构建服务器安装一个jinkins 服务<br>在本机部署安装Jenkins很简单，但要在一个合适的构建服务器上安装Jenkins就需要稍微布置一下了。  </p><p>在Linux上安装Jenkins，好的做法是为Jenkins常见一个用户和用户组，这使得在监控构建所使用的系统资源及排查问题构建更方便。 </p><p>两种安装启动方式<br>##一、Jenkins用户war包启动</p><h3 id="准备构建服务器"><a href="#准备构建服务器" class="headerlink" title="准备构建服务器"></a>准备构建服务器</h3><p>1、创建Jenkins用户及用户组。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd build</span><br><span class="line">$ sudo useradd --create-home --shell &#x2F;bin&#x2F;bash --groups build jenkins</span><br></pre></td></tr></table></figure><p>2、为Jenkins用户配置环境变量<br>vim /home/jenkins/.bashrc</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME&#x3D;&#x2F;opt&#x2F;java&#x2F;jdk1.8.0_101</span><br><span class="line">export PATH&#x3D;$JAVA_HOME&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure><p>这样就可以在独立的环境中使用jenkins这个用户运行Jenkins了。  </p><h4 id="Jenkins主目录"><a href="#Jenkins主目录" class="headerlink" title="Jenkins主目录"></a>Jenkins主目录</h4><p>无论把war文件放在哪儿，Jenkins在运行服务后都会把它所有重要的数据放在一个专用的、隔离的Jenkins目录下。<br>会存储关于构建服务器的配置信息、构建作业、构建产物、插件和一些其他的信息。<br>默认情况下Jenkins主目录在当前用户主目录下的.jenkins。<br>可以通过定义JENKINS_HONME环境变量改变Jenkins的主目录</p><h3 id="以jenkins用户启动Jenkins"><a href="#以jenkins用户启动Jenkins" class="headerlink" title="以jenkins用户启动Jenkins"></a>以jenkins用户启动Jenkins</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo su - jenkins</span><br><span class="line">$ java -jar &#x2F;usr&#x2F;local&#x2F;jenkins&#x2F;jenkins.war</span><br></pre></td></tr></table></figure><p>其他参数：–httpPort=8080<br>          –prefix=jenkins<br>          –daemon<br>          –logfile=/var/logs/jenkins.log</p><p>##二、安装为服务</p><h3 id="在debian或ubuntu上安装Jenkins"><a href="#在debian或ubuntu上安装Jenkins" class="headerlink" title="在debian或ubuntu上安装Jenkins"></a>在debian或ubuntu上安装Jenkins</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ wget -q -O - https:&#x2F;&#x2F;pkg.jenkins.io&#x2F;debian&#x2F;jenkins.io.key | sudo apt-key add -</span><br><span class="line">$ sudo sh -c &#39;echo deb http:&#x2F;&#x2F;pkg.jenkins.io&#x2F;debian-stable binary&#x2F; &gt; &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;jenkins.list&#39;</span><br><span class="line">$ sudo apt-get update</span><br><span class="line">$ sudo apt-get install jenkins</span><br></pre></td></tr></table></figure><p>这种方式把Jenkins安装成一个服务，在/etc/init.d/jenkins配置了启动脚本。<br>同时有一个相应的系统用户名‘jenkins’。<br>Jenkins的主目录为/var/lib/jenkins。<br>日志文件在/var/log/jenkins/jenkins.log。<br>调整配置参数在/etc/default/jenkins。  </p><p>其他安装参考：<a href="https://jenkins.io/doc/book/installing/">jenkins_install</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;在构建服务器安装一个jinkins 服务&lt;br&gt;在本机部署安装Jenkins很简单，但要在一个合适的构建服务器上安装Jenkins就需要稍微布置一下了。  &lt;/p&gt;
-&lt;p&gt;在Linux上安装Jenkins，好的做法是为Jenkins常见一个用户和用户组，这使得在监控构建所使
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://yoursite.com/2020/06/04/hello-world/"/>
-    <id>http://yoursite.com/2020/06/04/hello-world/</id>
-    <published>2020-06-04T02:27:11.575Z</published>
-    <updated>2017-07-30T08:37:25.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html">Deployment</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for
-      
-    
-    </summary>
-    
-    
-    
-  </entry>
   
   <entry>
     <title>前端文件更新方案</title>
@@ -528,6 +276,321 @@
       <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
       <category term="nginx配置" scheme="http://yoursite.com/tags/nginx%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>慢查询优化1</title>
+    <link href="http://yoursite.com/2020/03/27/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%961/"/>
+    <id>http://yoursite.com/2020/03/27/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/%E6%85%A2%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%961/</id>
+    <published>2020-03-26T16:00:00.000Z</published>
+    <updated>2020-03-27T12:45:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<p> 慢查询优化</p><p>在阿里云mongodb控制台，可看到慢日志的统计和明细分析比较方便，或者可以在mongodb shll环境中针对某个数据库查看慢日志记录。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.system.profile.find( &#123; millis : &#123; $gt : 120 &#125; &#125; )</span><br></pre></td></tr></table></figure><p>在控制台查得如下慢查询记录</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">db.setStudyRecord.find(&#123;"ownerId": "eat_cp_210",</span><br><span class="line">            "courseId": 488,</span><br><span class="line">            "studentId": 7107,</span><br><span class="line">            "studyType": &#123;</span><br><span class="line">                "$gte": 10,</span><br><span class="line">                "$lt": 20</span><br><span class="line">            &#125;,</span><br><span class="line">            "isFinished": false,</span><br><span class="line">            "studyResId": &#123;</span><br><span class="line">                "$in": [  1344,1345,1347,1348,1349,1350,1351  ]</span><br><span class="line">                &#125;&#125;)</span><br></pre></td></tr></table></figure><p>使用MongoDB explain进行分析</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br></pre></td><td class="code"><pre><span class="line">db.setStudyRecord.find(&#123;"ownerId": "eat_cp_210",</span><br><span class="line">            "courseId": 488,</span><br><span class="line">            "studentId": 7107,</span><br><span class="line">            "studyType": &#123;</span><br><span class="line">                "$gte": 10,</span><br><span class="line">                "$lt": 20</span><br><span class="line">            &#125;,</span><br><span class="line">            "isFinished": false,</span><br><span class="line">            "studyResId": &#123;</span><br><span class="line">                "$in": [1344,1345,1347,1348,1349,1350,1351 ]</span><br><span class="line"> &#125;&#125;).explain("executionStats");</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">"queryPlanner"</span> : &#123;</span><br><span class="line">        <span class="attr">"plannerVersion"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"namespace"</span> : <span class="string">"aixueyou_eat190428.setStudyRecord"</span>,</span><br><span class="line">        <span class="attr">"indexFilterSet"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"parsedQuery"</span> : &#123;</span><br><span class="line">            <span class="attr">"$and"</span> : [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"courseId"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$eq"</span> : <span class="number">488</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"isFinished"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$eq"</span> : <span class="literal">false</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"ownerId"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$eq"</span> : <span class="string">"eat_cp_210"</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"studentId"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$eq"</span> : <span class="number">7107</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$lt"</span> : <span class="number">20</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$gte"</span> : <span class="number">10</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"studyResId"</span> : &#123;</span><br><span class="line">                        <span class="attr">"$in"</span> : [</span><br><span class="line">                            <span class="number">1344</span>,</span><br><span class="line">                            <span class="number">1345</span>,</span><br><span class="line">                            <span class="number">1347</span>,</span><br><span class="line">                            <span class="number">1348</span>,</span><br><span class="line">                            <span class="number">1349</span>,</span><br><span class="line">                            <span class="number">1350</span>,</span><br><span class="line">                            <span class="number">1351</span></span><br><span class="line">                        ]</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"winningPlan"</span> : &#123;</span><br><span class="line">            <span class="attr">"stage"</span> : <span class="string">"COLLSCAN"</span>,</span><br><span class="line">            <span class="attr">"filter"</span> : &#123;</span><br><span class="line">                <span class="attr">"$and"</span> : [</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"courseId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="number">488</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"isFinished"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="literal">false</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"ownerId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="string">"eat_cp_210"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studentId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="number">7107</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$lt"</span> : <span class="number">20</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$gte"</span> : <span class="number">10</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyResId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$in"</span> : [</span><br><span class="line">                                <span class="number">1344</span>,</span><br><span class="line">                                <span class="number">1345</span>,</span><br><span class="line">                                <span class="number">1347</span>,</span><br><span class="line">                                <span class="number">1348</span>,</span><br><span class="line">                                <span class="number">1349</span>,</span><br><span class="line">                                <span class="number">1350</span>,</span><br><span class="line">                                <span class="number">1351</span></span><br><span class="line">                            ]</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"direction"</span> : <span class="string">"forward"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">"rejectedPlans"</span> : [ ]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"executionStats"</span> : &#123;</span><br><span class="line">        <span class="attr">"executionSuccess"</span> : <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"nReturned"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"executionTimeMillis"</span> : <span class="number">289</span>,</span><br><span class="line">        <span class="attr">"totalKeysExamined"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"totalDocsExamined"</span> : <span class="number">286856</span>,</span><br><span class="line">        <span class="attr">"executionStages"</span> : &#123;</span><br><span class="line">            <span class="attr">"stage"</span> : <span class="string">"COLLSCAN"</span>,</span><br><span class="line">            <span class="attr">"filter"</span> : &#123;</span><br><span class="line">                <span class="attr">"$and"</span> : [</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"courseId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="number">488</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"isFinished"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="literal">false</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"ownerId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="string">"eat_cp_210"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studentId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$eq"</span> : <span class="number">7107</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$lt"</span> : <span class="number">20</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyType"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$gte"</span> : <span class="number">10</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    &#123;</span><br><span class="line">                        <span class="attr">"studyResId"</span> : &#123;</span><br><span class="line">                            <span class="attr">"$in"</span> : [</span><br><span class="line">                                <span class="number">1344</span>,</span><br><span class="line">                                <span class="number">1345</span>,</span><br><span class="line">                                <span class="number">1347</span>,</span><br><span class="line">                                <span class="number">1348</span>,</span><br><span class="line">                                <span class="number">1349</span>,</span><br><span class="line">                                <span class="number">1350</span>,</span><br><span class="line">                                <span class="number">1351</span></span><br><span class="line">                            ]</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">"nReturned"</span> : <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"executionTimeMillisEstimate"</span> : <span class="number">280</span>,</span><br><span class="line">            <span class="attr">"works"</span> : <span class="number">286858</span>,</span><br><span class="line">            <span class="attr">"advanced"</span> : <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"needTime"</span> : <span class="number">286857</span>,</span><br><span class="line">            <span class="attr">"needYield"</span> : <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"saveState"</span> : <span class="number">2241</span>,</span><br><span class="line">            <span class="attr">"restoreState"</span> : <span class="number">2241</span>,</span><br><span class="line">            <span class="attr">"isEOF"</span> : <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"invalidates"</span> : <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"direction"</span> : <span class="string">"forward"</span>,</span><br><span class="line">            <span class="attr">"docsExamined"</span> : <span class="number">286856</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"ok"</span> : <span class="number">1</span>,</span><br><span class="line">    "operationTime" : Timestamp(1585311418, 2),</span><br><span class="line">    "$clusterTime" : &#123;</span><br><span class="line">        "clusterTime" : Timestamp(1585311418, 2),</span><br><span class="line">        "signature" : &#123;</span><br><span class="line">            "hash" : BinData(0,"vFOb4kXYvePgnFtOu1B8ASuxLi0="),</span><br><span class="line">            "keyId" : NumberLong("6778070851129442306")</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>可以看到是全表扫描，执行时间280ms</p><p>建立索引</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> db.setStudyRecord.createIndex( &#123; ownerId: 1,courseId:1,studentId:1,studyType:1,isFinished:1,studyResId:1&#125;, &#123;background: <span class="literal">true</span>&#125; )</span></span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; 慢查询优化&lt;/p&gt;
+&lt;p&gt;在阿里云mongodb控制台，可看到慢日志的统计和明细分析比较方便，或者可以在mongodb shll环境中针对某个数据库查看慢日志记录。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td cl
+      
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://yoursite.com/categories/MongoDB/"/>
+    
+    
+      <category term="MongoDB" scheme="http://yoursite.com/tags/MongoDB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mongodb按字符串长度查找数据</title>
+    <link href="http://yoursite.com/2020/03/16/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/%E6%8C%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6%E6%9F%A5%E6%89%BE%E6%95%B0%E6%8D%AE/"/>
+    <id>http://yoursite.com/2020/03/16/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/%E6%8C%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%95%BF%E5%BA%A6%E6%9F%A5%E6%89%BE%E6%95%B0%E6%8D%AE/</id>
+    <published>2020-03-15T16:00:00.000Z</published>
+    <updated>2020-03-17T02:56:13.569Z</updated>
+    
+    <content type="html"><![CDATA[<p>根据字符串字段的长度来筛选一些数据，这时候可能会用到正则表达式，也可以用mongodb的$where。</p><p>查询职业编码大于等于10的职业。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> <span class="variable">$where</span>写法:</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> db.spOccupation.find(&#123;<span class="string">"<span class="variable">$where</span>"</span>:<span class="string">"this.code.length&gt;=10"</span>&#125;);</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 正则表达式写法：</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> db.spOccupation.find(&#123;<span class="string">"code"</span>:&#123;<span class="string">"<span class="variable">$regex</span>"</span>:/^.&#123;10,&#125;$/&#125;&#125;);</span></span><br></pre></td></tr></table></figure><p>其他条件正则：<br><strong>^.{n,m}$</strong>        n &lt;= 长度 &lt;= m<br><strong>^.{n}$</strong>            长度 = n</p><p>这个长度是字符的长度，比如”正则表达式”长度就是5</p><p>正则的性能比$where 的速度快很多 </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;根据字符串字段的长度来筛选一些数据，这时候可能会用到正则表达式，也可以用mongodb的$where。&lt;/p&gt;
+&lt;p&gt;查询职业编码大于等于10的职业。&lt;/p&gt;
+&lt;figure class=&quot;highlight shell&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gut
+      
+    
+    </summary>
+    
+    
+      <category term="mongodb" scheme="http://yoursite.com/categories/mongodb/"/>
+    
+    
+      <category term="mongodb" scheme="http://yoursite.com/tags/mongodb/"/>
+    
+      <category term="数据操作" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>两路由局域网服务访问</title>
+    <link href="http://yoursite.com/2020/01/02/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/"/>
+    <id>http://yoursite.com/2020/01/02/%E5%B7%A5%E4%BD%9C/%E4%B8%A4%E8%B7%AF%E7%94%B1%E5%B1%80%E5%9F%9F%E7%BD%91%E6%9C%8D%E5%8A%A1%E8%AE%BF%E9%97%AE/</id>
+    <published>2020-01-01T16:00:00.000Z</published>
+    <updated>2020-06-04T03:20:47.349Z</updated>
+    
+    <content type="html"><![CDATA[<p>两路由组建局域网，实现服务访问</p><h4 id="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"><a href="#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。" class="headerlink" title="需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。"></a>需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。</h4><p><a href="https://simimg.com/i/5HSuX"><img src="https://s1.simimg.com/2017/09/03/5HSuX.png" alt="5HSuX.png"></a></p><h1 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h1><p>  1、原有网络局域网现状<br>       主路由：网关：192.168.1.2<br>              子网掩码：255.255.255.0<br>              IP:192.168.1.xxx<br>        PC :  IP：192.168.1.101<br>             子网掩码：255.255.255.0<br>             网关：192.168.1.2<br>  2、副路由<br>      LAN口： IP:10.10.10.1<br>             子网掩码：255.0.0.0<br>      WAN口： IP:192.168.1.20<br>              子网掩码：255.255.255.0<br>              网关：192.168.1.2<br>  3、盒子<br>      IP:10.10.10.100<br>      子网掩码：255.0.0.0<br>      网关：10.10.10.1</p><h1 id="副路由-（TP-LINK）设置"><a href="#副路由-（TP-LINK）设置" class="headerlink" title="副路由 （TP-LINK）设置"></a>副路由 （TP-LINK）设置</h1><p>   1、路由通电后，通过浏览器访问路由地址（192.168.0.1）。<br>   2、LAN口设置：IP地址：10.10.10.1（可任意），子网掩码：255.0.0.0（根据IP定）。<br>   3、保存，重启路由。<br>   4、通过浏览器访问路由地址10.10.10.1<br>   5、WAN口设置<br>         模式：静态IP<br>         IP地址：192.168.1.20（在原局域网内不冲突即可，此IP用于盒子服务的访问）<br>         子网掩码：255.255.255.0<br>         网关：192.168.1.2<br>         DNS服务器：192.168.1.2<br>   6、虚拟服务器 端口映射 把80端口映射到盒子ip:10.10.10.100<br>   7、把网线从原路由LAN口连接到副路由WAN口。</p><h1 id="盒子服务安装及设置"><a href="#盒子服务安装及设置" class="headerlink" title="盒子服务安装及设置"></a>盒子服务安装及设置</h1><p>   1、安装好Tomcat及nginx服务。(注意：静态页面中IP要为动态获取。)<br>   2、修改nginx配置：监听80端口，转发到tomcat。<br>即可在PC上通过192.168.1.20访问盒子上的tomcat服务。</p><h1 id="下面实现可以域名访问"><a href="#下面实现可以域名访问" class="headerlink" title="下面实现可以域名访问"></a>下面实现可以域名访问</h1><p>前提：拥有主路由的管理权（要修改DNS）<br>   因要考虑在无网络的情况及不修改原有网络机器，所以在盒子上部署DNS服务器。<br>   1、在盒子上部署DNS服务器。（参考上篇：DNS主备服务）<br>   2、配置域名指向,域名指向的IP地址应为副路由WAN口地址（192.168.1.20）<br>   3、在副路由中配置DNS<br>      在虚拟服务器 端口映射添加记录，把53端口指向到盒子IP:10.10.10.100,协议为全部。<br>   4、在主路由中配置DNS<br>      在DHCP服务器中首选DNS输入192.168.1.20，备用DNS输入114.114.114.114<br>即可在PC上通过域名访问盒子上服务。</p><h1 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h1><p>如若在准备阶段就可给盒子分配一该网络下固定的IP，就可省去路由这一步。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;两路由组建局域网，实现服务访问&lt;/p&gt;
+&lt;h4 id=&quot;需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot;&gt;&lt;a href=&quot;#需求：在不修改和影响原有网络及盒子IP的情况下，通过pc访问盒子上的服务。&quot; class=&quot;headerlink&quot; ti
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>将Jenkins安装为systemd服务</title>
+    <link href="http://yoursite.com/2019/12/28/Jenkins/%E5%B0%86jenkins%E5%AE%89%E8%A3%85%E4%B8%BAsystemd%E6%9C%8D%E5%8A%A1/"/>
+    <id>http://yoursite.com/2019/12/28/Jenkins/%E5%B0%86jenkins%E5%AE%89%E8%A3%85%E4%B8%BAsystemd%E6%9C%8D%E5%8A%A1/</id>
+    <published>2019-12-27T16:00:00.000Z</published>
+    <updated>2019-12-28T09:56:50.157Z</updated>
+    
+    <content type="html"><![CDATA[<p>Jenkins的部署方式是将jar放在了tomcat下(具体参考之前的部署方式)，然后通过系统环境变量(<code>/etc/profile</code>)中指定Jenkins工作空间及时区变量。</p><p>所以此文将Jenkins安装为systemd服务，也就是将tomcat安装为systemd服务。</p><p>1、新建项目的systemd管理文件jenkins.service</p><p><code>vim /etc/systemd/system/jenkins.service</code></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=jenkins-tomcat9900</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">WorkingDirectory=/ssdb1/tomcat/tomcat-jenkins/bin</span><br><span class="line">Environment=JAVA_HOME==/usr/<span class="built_in">local</span>/java/jdk1.8.0_231</span><br><span class="line">Environment=JENKINS_HOME=/ssdb1/jenkins</span><br><span class="line">Environment=JENKINS_JAVA_OPTIONS=<span class="string">"-Dorg.apache.commons.jelly.tags.fmt.timeZone=Asia/Shanghai"</span></span><br><span class="line">ExecStart=/ssdb1/tomcat/tomcat-jenkins/bin/catalina.sh start</span><br><span class="line">ExecReload=/ssdb1/tomcat/tomcat-jenkins/bin/catalina.sh restart</span><br><span class="line">ExecStop=/ssdb1/tomcat/tomcat-jenkins/bin/catalina.sh stop</span><br><span class="line">SuccessExitStatus=143</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure><p>主要注意点，通过systemd进行管理的服务，在<code>/etc/profile</code>中定义的环境变量，不会生效，所以需要通过<code>Environment</code> 定义环境变量。</p><p>2、管理</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl daemon-reload</span><br><span class="line">$ systemctl <span class="built_in">enable</span> jenkins.service</span><br><span class="line">$ systemctl start jenkins.service</span><br></pre></td></tr></table></figure><p>3、查看状态</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ systemctl status jenkins.service</span><br></pre></td></tr></table></figure><p>4、查看服务日志</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  vim /var/<span class="built_in">log</span>/syslog</span><br></pre></td></tr></table></figure><p>之前的相关记录：<br><a href="https://myqzf.github.io/2018/08/29/java/Spring-Boot/Spring-boot%E9%83%A8%E7%BD%B2/">https://myqzf.github.io/2018/08/29/java/Spring-Boot/Spring-boot%E9%83%A8%E7%BD%B2/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Jenkins的部署方式是将jar放在了tomcat下(具体参考之前的部署方式)，然后通过系统环境变量(&lt;code&gt;/etc/profile&lt;/code&gt;)中指定Jenkins工作空间及时区变量。&lt;/p&gt;
+&lt;p&gt;所以此文将Jenkins安装为systemd服务，也就是将to
+      
+    
+    </summary>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/categories/Jenkins/"/>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+      <category term="systemd" scheme="http://yoursite.com/tags/systemd/"/>
+    
+      <category term="tomcat" scheme="http://yoursite.com/tags/tomcat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>jasperreports报表导出</title>
+    <link href="http://yoursite.com/2019/12/28/java/jasperreports%E6%8A%A5%E8%A1%A8%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2019/12/28/java/jasperreports%E6%8A%A5%E8%A1%A8%E5%AD%97%E4%BD%93%E5%8A%A0%E8%BD%BD%E9%97%AE%E9%A2%98/</id>
+    <published>2019-12-27T16:00:00.000Z</published>
+    <updated>2020-04-09T00:53:13.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>今天通知线上服务jasperreports报表pdf显示有问题，报错信息如下</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.sf.jasperreports.engine.util.JRFontNotFoundException: Font &#39;宋体&#39; is not available to the JVM. See the Javadoc for more details.</span><br></pre></td></tr></table></figure><p>本地是正常的，搜了下说和Linux字体有关。</p><p>拷贝windows下的字体到Ubuntu系统中，把字体放在项目class path下，都尝试了，没能解决问题。</p><p>下面是解决的过程</p><p>把windows下的需要的字体(C:\Windows\Fonts)到Ubuntu目录<code>/usr/share/fonts/TTF</code>(不存在则新建)下。</p><p>然后执行如下命令</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get update</span><br><span class="line">$ apt install xfonts-utils</span><br><span class="line">$ mkfontdir</span><br><span class="line">$ <span class="built_in">fc</span>-cache -fv</span><br></pre></td></tr></table></figure><p>最后重启服务，便正常显示了。</p><p>参考：<a href="https://blog.csdn.net/qq_26365837/article/details/91954206">Ubuntu系统安装字体方法</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;今天通知线上服务jasperreports报表pdf显示有问题，报错信息如下&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="jasperreports" scheme="http://yoursite.com/tags/jasperreports/"/>
+    
+      <category term="pdf" scheme="http://yoursite.com/tags/pdf/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Jenkins应用--上传文件至七牛</title>
+    <link href="http://yoursite.com/2019/12/27/Jenkins/jenkins%E5%BA%94%E7%94%A8--%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E8%87%B3%E4%B8%83%E7%89%9B/"/>
+    <id>http://yoursite.com/2019/12/27/Jenkins/jenkins%E5%BA%94%E7%94%A8--%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E8%87%B3%E4%B8%83%E7%89%9B/</id>
+    <published>2019-12-26T16:00:00.000Z</published>
+    <updated>2019-12-27T07:51:43.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>上传前端文件至七牛</p><p>在Ubuntu服务器上搭建了Samba服务。</p><p>更新前端文件时，只要把压缩包上传至共享文件夹的指定目录，然后通过jenkins进行构建时，会解压前端的压缩包，然后把解压后的文件拷贝到jenkins工作空间，然后通过七牛上传插件上传到七牛空间，并把index文件上传到服务器nginx文件夹下。</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">QINIUPREFIX=jndjrd  #七牛前缀</span><br><span class="line">FILE_DIR=/ssdb2/share/front/qiniu/jndjrd</span><br><span class="line">UNPACK_DIR=$FILE_DIR/unpack   #解压输出目录</span><br><span class="line">PROJECT_DIR=$WORKSPACE/$QINIUPREFIX  #上传文件目录</span><br><span class="line"></span><br><span class="line">cd $FILE_DIR</span><br><span class="line">zipCnt=`ls -l |grep "^-"|wc -l`</span><br><span class="line">echo "zipCnt=$zipCnt"</span><br><span class="line"></span><br><span class="line">if [ "$zipCnt" -eq "1" ];then</span><br><span class="line">   cp $FILE_DIR/* /ssdb2/share/front/backup/    #备份</span><br><span class="line">   zipName=`find *.zip`</span><br><span class="line">   echo "zipName=$zipName"</span><br><span class="line">   unzip $zipName -d $UNPACK_DIR</span><br><span class="line">else</span><br><span class="line">   echo "压缩文件存在 $zipCnt 个，构建退出"</span><br><span class="line">   set -e #注意，一定要先设置这个</span><br><span class="line">   exit 1  #然后再退出，jenkins就会报红显示构建失败</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">echo $WORKSPACE</span><br><span class="line">rm -r $PROJECT_DIR/</span><br><span class="line">mkdir $PROJECT_DIR</span><br><span class="line">cd $UNPACK_DIR/*/</span><br><span class="line">cp -r ./ $PROJECT_DIR</span><br><span class="line">rm -r $FILE_DIR/*     #清空目录，注意：删除高危操作！！！！</span><br></pre></td></tr></table></figure><p>脚本实现的主要是判断上传要更新的文件夹的前端压缩包个数，如果压缩包个数为1，则 拷贝压缩包至备份目录下，然后解压压缩包到unpack文件夹下，然后清空jenkins工作空间上次构建的文件，接着把解压后的文件拷贝到工作空间，等待着通过jenkins插件进行上传。然后清空上传的目录，以便下次更新上传压缩包。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;上传前端文件至七牛&lt;/p&gt;
+&lt;p&gt;在Ubuntu服务器上搭建了Samba服务。&lt;/p&gt;
+&lt;p&gt;更新前端文件时，只要把压缩包上传至共享文件夹的指定目录，然后通过jenkins进行构建时，会解压前端的压缩包，然后把解压后的文件拷贝到jenkins工作空间，然后通过七牛上传插件上
+      
+    
+    </summary>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/categories/Jenkins/"/>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>GitHub提交时忽略不必要上传的文件</title>
+    <link href="http://yoursite.com/2019/12/21/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/GitHub%E6%8F%90%E4%BA%A4%E6%97%B6%E5%BF%BD%E7%95%A5%E4%B8%8D%E5%BF%85%E8%A6%81%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E4%BB%B6/"/>
+    <id>http://yoursite.com/2019/12/21/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/GitHub%E6%8F%90%E4%BA%A4%E6%97%B6%E5%BF%BD%E7%95%A5%E4%B8%8D%E5%BF%85%E8%A6%81%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E4%BB%B6/</id>
+    <published>2019-12-20T16:00:00.000Z</published>
+    <updated>2019-12-21T12:54:28.399Z</updated>
+    
+    <content type="html"><![CDATA[<p>新建.gitignore文件，写入要忽略的内容</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.gitignore  </span><br><span class="line">.settings&#x2F;  &#x2F;&#x2F;忽略idea目录下的所有文件</span><br><span class="line">.project  &#x2F;&#x2F;忽略项目根目录下的 .project 文件</span><br><span class="line">target&#x2F;</span><br><span class="line"></span><br><span class="line">*.zip            &#x2F;&#x2F;忽略所有.zip结尾的文件</span><br><span class="line">doc&#x2F;*.txt        &#x2F;&#x2F;忽略 doc&#x2F;notes.txt,但不包括 doc&#x2F;server&#x2F;arch.txt</span><br><span class="line"></span><br><span class="line">!test.txt        &#x2F;&#x2F;不忽略 test.txt 文件</span><br></pre></td></tr></table></figure><p>注:如果要忽略的文件已被git管理,需要先移除,命令如下:</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rm -r  target/    //-r为递归</span><br></pre></td></tr></table></figure><p> 然后git commit</p><p> 最后.gitignore中的忽略，就会起作用</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;新建.gitignore文件，写入要忽略的内容&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class
+      
+    
+    </summary>
+    
+    
+      <category term="git" scheme="http://yoursite.com/categories/git/"/>
+    
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Jmeter压测</title>
+    <link href="http://yoursite.com/2019/12/16/%E5%B7%A5%E4%BD%9C/Jmeter%E5%8E%8B%E6%B5%8B-DESKTOP-S52MH0E/"/>
+    <id>http://yoursite.com/2019/12/16/%E5%B7%A5%E4%BD%9C/Jmeter%E5%8E%8B%E6%B5%8B-DESKTOP-S52MH0E/</id>
+    <published>2019-12-15T16:00:00.000Z</published>
+    <updated>2019-12-29T14:26:10.278Z</updated>
+    
+    <content type="html"><![CDATA[<p> 首先使用chrome插件BlazeMeter，录制jmeter请求脚本，导入到jmeter中。</p><p>对需要引用大量的外部数据，如用户名密码，可以添加   配置原件–&gt;CSV 数据文件设置变量，在请求中进行引用。</p><p>对需要引用获取到的请求数据，可以在所需请求后添加  后置处理器–&gt;正则表达式提取器,对变量值进行提取，然后再后续请求中引用。</p><p>使用集合点，阻塞线程，直到指定的线程数量到达后，再一起释放，可以瞬间产生很大的压力。（添加–&gt;定时器–&gt;同步定时器）（可能会导致部分线程组一直不结束）</p><p>压测</p><p>开启5000个线程组时，大量请求报错 java.net.BindException: Address already in use: connect</p><p>原因：可能是由TCP / IP端口耗尽引起的。在非常高的负载下，反复连接到其他服务的服务器可能会耗尽临时端口。 刚刚关闭的端口号在重新使用之前，会保持一段时间的等待状态。如果连接速率足够高，则所有端口最终都将处于等待状态，并且操作系统将无法再将连接绑定到端口。 </p><p>排查：可以使用以下内容确定端口耗尽是否是真正的瓶颈 。</p><p>1、在峰值负载下，运行“ netstat -ano -p tcp”将列出所有正在使用的端口。 </p><p>2、使用“ netsh int ipv4 show dynamicport tcp”监视范围内的可用端口。 </p><p>确定了如是导致的原因，解决</p><p>1、增加动态端口范围，默认情况下，最大值为5000，最多可以将其设置为65534，</p><p>HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\MaxUserPort 。</p><p>2、减少TIME_WAIT 状态 的时间 ，默认为4分钟，可以将其设置为30秒 ，</p><p>HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\TCPTimedWaitDelay 。</p><p>参考：<a href="https://support.pitneybowes.com/VFP06_KnowledgeWithSidebarTroubleshoot?id=kA280000000CgbbCAC&popup=false&lang=en_US">Address already in use: connect” in EngageOne Vault </a></p><p>  接下来测试</p><p>后台服务中报 org.apache.catalina.connector.ClientAbortException: java.io.IOException: Broken pipe。 </p><p>主要原因是 客户端先关闭了连接，服务器端没有执行关闭连接的操作。 </p><p>压测时在服务器执行</p><p>netstat -n | awk ‘/^tcp/ {++state[$NF]} END {for(key in state) print key,”\t”,state[key]}’</p><p>查看了下当时tcpip连接的状态，进一步排查。</p><p>这个原因是因为jmeter线程组一直不结束，在jmeter中手动停止了所有线程导致。</p><p>在jmeter请求中也会出现这样的错误java net SocketException: Socket closed</p><p>参考:[java.io.IOException: Broken pipe](<a href="https://blog.csdn.net/zqz_zqz/article/details/52235479">https://blog.csdn.net/zqz_zqz/article/details/52235479</a> N )</p><p>接着测试</p><p>使用nginx进行负载均衡到两个后台服务时，nginx日志发现<code>socket() failed (24: Too many open files) while connecting to upstream</code> </p><p>修改linux打开文件句柄数(可能遇到修改后不生效问题) 参考:<a href="<https://blog.csdn.net/leshami/article/details/8749773">ulimit: open files: cannot modify limit</a></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/security/limits.conf</span><br><span class="line">root  soft  nproc 16384</span><br><span class="line">root  hard  nproc 16384</span><br><span class="line">root  soft  nofile 65535</span><br><span class="line">root  hard  nofile 65535</span><br><span class="line">root  soft  memlock  4000000</span><br><span class="line">root  hard  memlock  4000000</span><br><span class="line">$ shutdown –r now  <span class="comment">#重启服务器</span></span><br><span class="line">$ <span class="built_in">ulimit</span> -a  <span class="comment">#检查生效否</span></span><br></pre></td></tr></table></figure><p>修改nginx打开文件数 </p><p>在nginx.conf 添加了worker_rlimit_nofile 20480;</p><p>接着测试</p><p>后面测试nginx又报1024 worker_connections are not enough。</p><p>修改nginx.conf中配置 worker_connections 10240 </p><p>再次测试 </p><p>发现有些请求nginx异常</p><p>131175 no live upstreams while connecting to upstream</p><p>发现nginx负载到的其中一个服务没启动。</p><p> 插件</p><p>jp@gc - PerfMon Metrics Collector：服务器性能监测控件，包括CPU，Memory，Network，Ｉ/Ｏ等等（此功能用到在需监听的服务器上启动startAgent）</p><p> 根据需要选择CPU，Memory，Network Ｉ/Ｏ等</p><p><a href="https://jmeter-plugins.org/wiki/PerfMon/">PerfMon wiki</a></p><p>jp@gc - Respose Times Over Time： 响应时间超时，显示每个采样以毫秒为单位的平均响应时间</p><p>jp@gc - Transactions per Second： 每秒事务数，服务器每秒处理的事务数</p><p>jp@gc - Actiive Threads Over Time：不同时间的活动用户数量展示</p><p>jp@gc - Reponse Times Distribution： 显示测试的响应时间分布，X轴显示由时间间隔分组的响应时间，Y轴包含每个区间的样本数 <a href="https://jmeter-plugins.org/wiki/RespTimesDistribution/">Distribution/Percentile Graphs   </a>  </p><p> JMeter分布式并发时，几个问题解决方法，1、每个request的具体response返回。2、禁掉不使用的虚拟机网卡</p><p> <a href="https://www.cnblogs.com/jane4321/p/11013042.html">https://www.cnblogs.com/jane4321/p/11013042.html</a></p><p><a href="https://www.zhihu.com/question/45406520">https://www.zhihu.com/question/45406520</a></p><p><a href="https://www.cnblogs.com/zonlo/p/8422583.html">https://www.cnblogs.com/zonlo/p/8422583.html</a> </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; 首先使用chrome插件BlazeMeter，录制jmeter请求脚本，导入到jmeter中。&lt;/p&gt;
+&lt;p&gt;对需要引用大量的外部数据，如用户名密码，可以添加   配置原件–&amp;gt;CSV 数据文件设置变量，在请求中进行引用。&lt;/p&gt;
+&lt;p&gt;对需要引用获取到的请求数据，可
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+      <category term="Jmeter" scheme="http://yoursite.com/tags/Jmeter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Jmeter压测</title>
+    <link href="http://yoursite.com/2019/12/16/%E5%B7%A5%E4%BD%9C/Jmeter%E5%8E%8B%E6%B5%8B/"/>
+    <id>http://yoursite.com/2019/12/16/%E5%B7%A5%E4%BD%9C/Jmeter%E5%8E%8B%E6%B5%8B/</id>
+    <published>2019-12-15T16:00:00.000Z</published>
+    <updated>2020-01-02T02:06:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p> 首先使用chrome插件BlazeMeter，录制jmeter请求脚本，导入到jmeter中。</p><p>对需要引用大量的外部数据，如用户名密码，可以添加   配置原件–&gt;CSV 数据文件设置变量，在请求中进行引用。</p><p>对需要引用获取到的请求数据，可以在所需请求后添加  后置处理器–&gt;正则表达式提取器,对变量值进行提取，然后再后续请求中引用。</p><p>使用集合点，阻塞线程，直到指定的线程数量到达后，再一起释放，可以瞬间产生很大的压力。（添加–&gt;定时器–&gt;同步定时器）（可能会导致部分线程组一直不结束）</p><p>压测</p><p>开启5000个线程组时，大量请求报错 java.net.BindException: Address already in use: connect</p><p>原因：可能是由TCP / IP端口耗尽引起的。在非常高的负载下，反复连接到其他服务的服务器可能会耗尽临时端口。 刚刚关闭的端口号在重新使用之前，会保持一段时间的等待状态。如果连接速率足够高，则所有端口最终都将处于等待状态，并且操作系统将无法再将连接绑定到端口。 </p><p>排查：可以使用以下内容确定端口耗尽是否是真正的瓶颈 。</p><p>1、在峰值负载下，运行“ netstat -ano -p tcp”将列出所有正在使用的端口。 </p><p>2、使用“ netsh int ipv4 show dynamicport tcp”监视范围内的可用端口。 </p><p>确定了如是导致的原因，解决</p><p>1、增加动态端口范围，默认情况下，最大值为5000，最多可以将其设置为65534，</p><p>HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\MaxUserPort 。</p><p>2、减少TIME_WAIT 状态 的时间 ，默认为4分钟，可以将其设置为30秒 ，</p><p>HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\TCPTimedWaitDelay 。</p><p>参考：<a href="https://support.pitneybowes.com/VFP06_KnowledgeWithSidebarTroubleshoot?id=kA280000000CgbbCAC&popup=false&lang=en_US">Address already in use: connect” in EngageOne Vault </a></p><p>  接下来测试</p><p>后台服务中报 org.apache.catalina.connector.ClientAbortException: java.io.IOException: Broken pipe。 </p><p>主要原因是 客户端先关闭了连接，服务器端没有执行关闭连接的操作。 </p><p>压测时在服务器执行</p><p>netstat -n | awk ‘/^tcp/ {++state[$NF]} END {for(key in state) print key,”\t”,state[key]}’</p><p>查看了下当时tcpip连接的状态，进一步排查。</p><p>这个原因是因为jmeter线程组一直不结束，在jmeter中手动停止了所有线程导致。</p><p>在jmeter请求中也会出现这样的错误java net SocketException: Socket closed</p><p>参考:[java.io.IOException: Broken pipe](<a href="https://blog.csdn.net/zqz_zqz/article/details/52235479">https://blog.csdn.net/zqz_zqz/article/details/52235479</a> N )</p><p>接着测试</p><p>使用nginx进行负载均衡到两个后台服务时，nginx日志发现<code>socket() failed (24: Too many open files) while connecting to upstream</code> </p><p>修改linux打开文件句柄数(可能遇到修改后不生效问题) 参考:<a href="<https://blog.csdn.net/leshami/article/details/8749773">ulimit: open files: cannot modify limit</a></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/security/limits.conf</span><br><span class="line">root  soft  nproc 16384</span><br><span class="line">root  hard  nproc 16384</span><br><span class="line">root  soft  nofile 65535</span><br><span class="line">root  hard  nofile 65535</span><br><span class="line">root  soft  memlock  4000000</span><br><span class="line">root  hard  memlock  4000000</span><br><span class="line">$ shutdown –r now  <span class="comment">#重启服务器</span></span><br><span class="line">$ <span class="built_in">ulimit</span> -a  <span class="comment">#检查生效否</span></span><br></pre></td></tr></table></figure><p>修改nginx打开文件数 </p><p>在nginx.conf 添加了worker_rlimit_nofile 20480;</p><p>接着测试</p><p>后面测试nginx又报1024 worker_connections are not enough。</p><p>修改nginx.conf中配置 worker_connections 10240 </p><p>再次测试 </p><p>发现有些请求nginx异常</p><p>131175 no live upstreams while connecting to upstream</p><p>发现nginx负载到的其中一个服务没启动。</p><p> 插件</p><p>jp@gc - PerfMon Metrics Collector：服务器性能监测控件，包括CPU，Memory，Network，Ｉ/Ｏ等等（此功能用到在需监听的服务器上启动startAgent）</p><p> 根据需要选择CPU，Memory，Network Ｉ/Ｏ等</p><p><a href="https://jmeter-plugins.org/wiki/PerfMon/">PerfMon wiki</a></p><p>jp@gc - Respose Times Over Time： 响应时间超时，显示每个采样以毫秒为单位的平均响应时间</p><p>jp@gc - Transactions per Second： 每秒事务数，服务器每秒处理的事务数</p><p>jp@gc - Actiive Threads Over Time：不同时间的活动用户数量展示</p><p>jp@gc - Reponse Times Distribution： 显示测试的响应时间分布，X轴显示由时间间隔分组的响应时间，Y轴包含每个区间的样本数 <a href="https://jmeter-plugins.org/wiki/RespTimesDistribution/">Distribution/Percentile Graphs   </a>  </p><p> JMeter分布式并发时，几个问题解决方法，1、每个request的具体response返回。2、禁掉不使用的虚拟机网卡</p><p> <a href="https://www.cnblogs.com/jane4321/p/11013042.html">https://www.cnblogs.com/jane4321/p/11013042.html</a></p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/jmeter-server -Djava.rmi.server.hostname=192.168.1.80</span><br></pre></td></tr></table></figure><p><a href="https://www.zhihu.com/question/45406520">https://www.zhihu.com/question/45406520</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt; 首先使用chrome插件BlazeMeter，录制jmeter请求脚本，导入到jmeter中。&lt;/p&gt;
+&lt;p&gt;对需要引用大量的外部数据，如用户名密码，可以添加   配置原件–&amp;gt;CSV 数据文件设置变量，在请求中进行引用。&lt;/p&gt;
+&lt;p&gt;对需要引用获取到的请求数据，可
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+      <category term="Jmeter" scheme="http://yoursite.com/tags/Jmeter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mongodb-修改备案职业级别中科目Id(0-&gt;5)</title>
+    <link href="http://yoursite.com/2019/12/12/%E5%B7%A5%E4%BD%9C/mongodb-%E4%BF%AE%E6%94%B9%E5%A4%87%E6%A1%88%E8%81%8C%E4%B8%9A%E7%BA%A7%E5%88%AB%E4%B8%AD%E7%A7%91%E7%9B%AEId(0-5)/"/>
+    <id>http://yoursite.com/2019/12/12/%E5%B7%A5%E4%BD%9C/mongodb-%E4%BF%AE%E6%94%B9%E5%A4%87%E6%A1%88%E8%81%8C%E4%B8%9A%E7%BA%A7%E5%88%AB%E4%B8%AD%E7%A7%91%E7%9B%AEId(0-5)/</id>
+    <published>2019-12-11T16:00:00.000Z</published>
+    <updated>2019-12-12T02:15:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>修改备案职业级别中科目职业道德的科目Id(0 -&gt;5 )，及对应的默认报名费用{0:0 -&gt; 5:0}</p><p>数据结构</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"_id"</span> : NumberLong(<span class="number">8</span>),</span><br><span class="line">  <span class="attr">"recordPlanId"</span> : NumberLong(<span class="number">3</span>),</span><br><span class="line">  <span class="attr">"userGroup"</span> : <span class="string">"45"</span>,</span><br><span class="line">  <span class="attr">"occupationId"</span> : NumberLong(<span class="number">2567</span>),</span><br><span class="line">  <span class="attr">"occupationTitle"</span> : <span class="string">"车工"</span>,</span><br><span class="line">  <span class="attr">"testLevels"</span> : [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>],</span><br><span class="line">  <span class="attr">"testSubjects"</span> : &#123;</span><br><span class="line">    <span class="attr">"5"</span> : [&#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"职业道德"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"理论"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">100</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">2</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"技能"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">200</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"工作业绩"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;],</span><br><span class="line">    <span class="attr">"4"</span> : [&#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"职业道德"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"理论"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">100</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">2</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"技能"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">200</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"工作业绩"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;],</span><br><span class="line">    <span class="attr">"3"</span> : [&#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"职业道德"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"理论"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">100</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">2</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"技能"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">200</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"工作业绩"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;],</span><br><span class="line">    <span class="attr">"2"</span> : [&#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"职业道德"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"理论"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">100</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">2</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"技能"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">200</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"综合"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">300</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"工作业绩"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;],</span><br><span class="line">    <span class="attr">"1"</span> : [&#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"职业道德"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">1</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"理论"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">100</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">2</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"技能"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">200</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">3</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"综合"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">300</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="attr">"subjectId"</span> : <span class="number">4</span>,</span><br><span class="line">        <span class="attr">"title"</span> : <span class="string">"工作业绩"</span>,</span><br><span class="line">        <span class="attr">"testType"</span> : <span class="number">0</span>,</span><br><span class="line">        <span class="attr">"isComputerTest"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isReadCard"</span> : <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"isMobileScore"</span> : <span class="literal">false</span></span><br><span class="line">      &#125;]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"enrollFees"</span> : &#123;</span><br><span class="line">    <span class="attr">"1"</span> : &#123;</span><br><span class="line">      <span class="attr">"0"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"1"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"2"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"3"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"4"</span> : <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"2"</span> : &#123;</span><br><span class="line">      <span class="attr">"0"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"1"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"2"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"3"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"4"</span> : <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"3"</span> : &#123;</span><br><span class="line">      <span class="attr">"0"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"1"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"2"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"4"</span> : <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"4"</span> : &#123;</span><br><span class="line">      <span class="attr">"0"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"1"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"2"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"4"</span> : <span class="number">0</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"5"</span> : &#123;</span><br><span class="line">      <span class="attr">"0"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"1"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"2"</span> : <span class="number">0</span>,</span><br><span class="line">      <span class="attr">"4"</span> : <span class="number">0</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"uid"</span> : <span class="string">"d75f8deffe5b4e81babbf6b76ae02144"</span>,</span><br><span class="line">  <span class="attr">"unitId"</span> : NumberLong(<span class="number">2</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>  <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改备案职业级别中科目职业道德的科目Id(0-&gt;5)</span></span><br><span class="line">db.irTestRange.find(&#123;<span class="string">"testSubjects.1"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;)</span><br><span class="line">db.irTestRange.find(&#123;<span class="string">"testSubjects.2"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;)</span><br><span class="line">db.irTestRange.find(&#123;<span class="string">"testSubjects.3"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;)</span><br><span class="line">db.irTestRange.find(&#123;<span class="string">"testSubjects.4"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;)</span><br><span class="line">db.irTestRange.find(&#123;<span class="string">"testSubjects.5"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">db.irTestRange.update(&#123;<span class="string">"testSubjects.1"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;,</span><br><span class="line">&#123;<span class="string">"<span class="variable">$set</span>"</span>:&#123;<span class="string">"testSubjects.1.$.subjectId"</span>:NumberInt(5),<span class="string">"enrollFees.1.5"</span>:NumberInt(0)&#125;,<span class="string">"<span class="variable">$unset</span>"</span>:&#123;<span class="string">"enrollFees.1.0"</span>:1&#125;&#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">db.irTestRange.update(&#123;<span class="string">"testSubjects.2"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;,</span><br><span class="line">&#123;<span class="string">"<span class="variable">$set</span>"</span>:&#123;<span class="string">"testSubjects.2.$.subjectId"</span>:NumberInt(5),<span class="string">"enrollFees.2.5"</span>:NumberInt(0)&#125;,<span class="string">"<span class="variable">$unset</span>"</span>:&#123;<span class="string">"enrollFees.2.0"</span>:1&#125;&#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">db.irTestRange.update(&#123;<span class="string">"testSubjects.3"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;,</span><br><span class="line">&#123;<span class="string">"<span class="variable">$set</span>"</span>:&#123;<span class="string">"testSubjects.3.$.subjectId"</span>:NumberInt(5),<span class="string">"enrollFees.3.5"</span>:NumberInt(0)&#125;,<span class="string">"<span class="variable">$unset</span>"</span>:&#123;<span class="string">"enrollFees.3.0"</span>:1&#125;&#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">db.irTestRange.update(&#123;<span class="string">"testSubjects.4"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;,</span><br><span class="line">&#123;<span class="string">"<span class="variable">$set</span>"</span>:&#123;<span class="string">"testSubjects.4.$.subjectId"</span>:NumberInt(5),<span class="string">"enrollFees.4.5"</span>:NumberInt(0)&#125;,<span class="string">"<span class="variable">$unset</span>"</span>:&#123;<span class="string">"enrollFees.4.0"</span>:1&#125;&#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">db.irTestRange.update(&#123;<span class="string">"testSubjects.5"</span>:&#123;<span class="string">"<span class="variable">$elemMatch</span>"</span>:&#123;<span class="string">"subjectId"</span>:0&#125;&#125;&#125;,</span><br><span class="line">&#123;<span class="string">"<span class="variable">$set</span>"</span>:&#123;<span class="string">"testSubjects.5.$.subjectId"</span>:NumberInt(5),<span class="string">"enrollFees.5.5"</span>:NumberInt(0)&#125;,<span class="string">"<span class="variable">$unset</span>"</span>:&#123;<span class="string">"enrollFees.5.0"</span>:1&#125;&#125;,<span class="literal">false</span>,<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;修改备案职业级别中科目职业道德的科目Id(0 -&amp;gt;5 )，及对应的默认报名费用{0:0 -&amp;gt; 5:0}&lt;/p&gt;
+&lt;p&gt;数据结构&lt;/p&gt;
+&lt;figure class=&quot;highlight json&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;p
+      
+    
+    </summary>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C/"/>
+    
+    
+      <category term="工作" scheme="http://yoursite.com/tags/%E5%B7%A5%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mongodb内存限制</title>
+    <link href="http://yoursite.com/2019/12/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/mongodb%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/"/>
+    <id>http://yoursite.com/2019/12/03/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/mongodb%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6/</id>
+    <published>2019-12-02T16:00:00.000Z</published>
+    <updated>2019-12-03T11:44:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>默认情况下，mongodb占用的内存大小为：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Starting in MongoDB 3.4, the default WiredTiger internal cache size is the larger of either:</span><br><span class="line"></span><br><span class="line">50% of (RAM - 1 GB), or</span><br><span class="line">256 MB.</span><br></pre></td></tr></table></figure><p>即 （总内存 × 50% - 1GB） 和 （256MB） 两者中的较大值。<br>当总内存大于1GB时，为总内存的一半，总内存小于1GB时，为256MB</p><p>由于mongodb会占用较大内存，所以生产环境一般会将mongodb单独托管。<br>特殊情况下，比如调试开发环境，或只有一台服务器，则可以限制mongodb的内存。<br>修改配置文件 /etc/mongod.conf, 即添加storage.wiredTiger.engineConfig.cacheSizeGB参数<br>如下：</p><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">systemLog:</span></span><br><span class="line">     <span class="attr">destination:</span> <span class="string">file</span></span><br><span class="line">     <span class="attr">path:</span> <span class="string">"/ssdb1/mongodb/mongodb4.0.13/logs/mongod.log"</span></span><br><span class="line">     <span class="attr">logAppend:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">storage:</span></span><br><span class="line">     <span class="attr">dbPath:</span> <span class="string">"/ssdb1/mongodb/mongodb4.0.13/data"</span></span><br><span class="line">     <span class="attr">journal:</span></span><br><span class="line">             <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">     <span class="attr">wiredTiger:</span></span><br><span class="line">             <span class="attr">engineConfig:</span></span><br><span class="line">                 <span class="attr">cacheSizeGB:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">processManagement:</span></span><br><span class="line">     <span class="attr">fork:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">net:</span></span><br><span class="line">     <span class="attr">bindIp:</span> <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span></span><br><span class="line">     <span class="attr">port:</span> <span class="number">27017</span></span><br></pre></td></tr></table></figure><p>然后重启mongodb</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ service mongodb restart</span><br></pre></td></tr></table></figure><p>参考：<a href="https://docs.mongodb.com/v3.4/core/wiredtiger/index.html">WiredTiger Storage Engine</a><br><a href="https://docs.mongodb.com/v3.4/reference/configuration-options/#storage.wiredTiger.engineConfig.cacheSizeGB">storage.wiredTiger.engineConfig.cacheSizeGB</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;默认情况下，mongodb占用的内存大小为：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=
+      
+    
+    </summary>
+    
+    
+      <category term="MongoDB" scheme="http://yoursite.com/categories/MongoDB/"/>
+    
+    
+      <category term="MongoDB" scheme="http://yoursite.com/tags/MongoDB/"/>
     
   </entry>
   
