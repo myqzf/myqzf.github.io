@@ -91,6 +91,17 @@
 
 
 <p>参考：<a href="http://www.rabbitmq.com/install-debian.html">http://www.rabbitmq.com/install-debian.html</a></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2018-03-04T16:00:00.000Z">2018-03-05</time><a class="commentCountImg" href="/2018/03/05/RabbitMQ/RabbitMQ%E7%9A%84%E9%85%8D%E7%BD%AE(%E4%B8%89)/#comment-container"><span class="display-none-class">1b769a30c5beaf36bc23acb3b6ee9fad</span><img class="not-gallery-item" src="https://cdn.jsdelivr.net/gh/removeif/removeif.github.io@v2.2.1/img/chat.svg"> <span class="commentCount" id="1b769a30c5beaf36bc23acb3b6ee9fad"> 99+</span>    </a><span class="level-item">a few seconds read (About 103 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/03/05/RabbitMQ/RabbitMQ%E7%9A%84%E9%85%8D%E7%BD%AE(%E4%B8%89)/">RabbitMQ的配置</a></h1><div class="content"><p>从RabbitMQ 3.7.0开始</p>
+<ul>
+<li>单个设置的所有信息都在一行上。</li>
+<li>行是结构化的键=值。</li>
+<li>任何以＃开头的行都是注释。</li>
+</ul>
+<p>示例文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">listeners.tcp.default &#x3D; 5672  # RabbitMQ侦听客户端连接端口为5672。</span><br><span class="line">loopback_users &#x3D; none # 允许guest用户从远程主机进行连接</span><br></pre></td></tr></table></figure>
+
+<p>完整文件：<br><a href="https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/docs/rabbitmq.conf.example">https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/docs/rabbitmq.conf.example</a></p>
+<p>参考：<a href="https://www.rabbitmq.com/configure.html">https://www.rabbitmq.com/configure.html</a></p>
 </div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2018-03-04T16:00:00.000Z">2018-03-05</time><a class="commentCountImg" href="/2018/03/05/RabbitMQ/RabbitMQ%E6%8F%92%E4%BB%B6(%E4%BA%8C)/#comment-container"><span class="display-none-class">03ae157577dc5455017f726b95273506</span><img class="not-gallery-item" src="https://cdn.jsdelivr.net/gh/removeif/removeif.github.io@v2.2.1/img/chat.svg"> <span class="commentCount" id="03ae157577dc5455017f726b95273506"> 99+</span>    </a><span class="level-item">5 minutes read (About 739 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/03/05/RabbitMQ/RabbitMQ%E6%8F%92%E4%BB%B6(%E4%BA%8C)/">RabbitMQ插件、用户权限管理</a></h1><div class="content"><h2 id="RabbitMQ插件"><a href="#RabbitMQ插件" class="headerlink" title="RabbitMQ插件"></a>RabbitMQ插件</h2><p>1、插件列表</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> rabbitmq-plugins list</span></span><br></pre></td></tr></table></figure>
 <p>2、启用插件</p>
@@ -139,17 +150,6 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> rabbitmqctl set_permissions -p / bjcscn <span class="string">".*"</span> <span class="string">".*"</span> <span class="string">".*"</span></span></span><br></pre></td></tr></table></figure>
 
 <p>参考：<a href="http://www.rabbitmq.com/plugins.html">plugins</a><br><a href="https://www.rabbitmq.com/access-control.html">Access Control</a><br><a href="https://www.rabbitmq.com/rabbitmqctl.8.html#Access%20control">rabbitmqctl Access Control</a></p>
-</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2018-03-04T16:00:00.000Z">2018-03-05</time><a class="commentCountImg" href="/2018/03/05/RabbitMQ/RabbitMQ%E7%9A%84%E9%85%8D%E7%BD%AE(%E4%B8%89)/#comment-container"><span class="display-none-class">1b769a30c5beaf36bc23acb3b6ee9fad</span><img class="not-gallery-item" src="https://cdn.jsdelivr.net/gh/removeif/removeif.github.io@v2.2.1/img/chat.svg"> <span class="commentCount" id="1b769a30c5beaf36bc23acb3b6ee9fad"> 99+</span>    </a><span class="level-item">a few seconds read (About 103 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/03/05/RabbitMQ/RabbitMQ%E7%9A%84%E9%85%8D%E7%BD%AE(%E4%B8%89)/">RabbitMQ的配置</a></h1><div class="content"><p>从RabbitMQ 3.7.0开始</p>
-<ul>
-<li>单个设置的所有信息都在一行上。</li>
-<li>行是结构化的键=值。</li>
-<li>任何以＃开头的行都是注释。</li>
-</ul>
-<p>示例文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">listeners.tcp.default &#x3D; 5672  # RabbitMQ侦听客户端连接端口为5672。</span><br><span class="line">loopback_users &#x3D; none # 允许guest用户从远程主机进行连接</span><br></pre></td></tr></table></figure>
-
-<p>完整文件：<br><a href="https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/docs/rabbitmq.conf.example">https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/docs/rabbitmq.conf.example</a></p>
-<p>参考：<a href="https://www.rabbitmq.com/configure.html">https://www.rabbitmq.com/configure.html</a></p>
 </div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2018-02-08T16:00:00.000Z">2018-02-09</time><a class="commentCountImg" href="/2018/02/09/linux/%E5%91%BD%E4%BB%A4/%E6%B7%B7%E5%90%88%E5%91%BD%E4%BB%A4/#comment-container"><span class="display-none-class">8bd082bfa6a960e7b8d391a157f7e460</span><img class="not-gallery-item" src="https://cdn.jsdelivr.net/gh/removeif/removeif.github.io@v2.2.1/img/chat.svg"> <span class="commentCount" id="8bd082bfa6a960e7b8d391a157f7e460"> 99+</span>    </a><span class="level-item">a minute read (About 127 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/02/09/linux/%E5%91%BD%E4%BB%A4/%E6%B7%B7%E5%90%88%E5%91%BD%E4%BB%A4/">混合命令</a></h1><div class="content"><p>分析日志请求状态码</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$  tail -10000 localhost_access_log.2018-02-09.txt |awk &#39;&#123;print $9&#125;&#39;|sort |uniq -c |sort -nr</span><br><span class="line">  3206 200</span><br><span class="line">     3 500</span><br><span class="line">     1 304</span><br></pre></td></tr></table></figure>
 
