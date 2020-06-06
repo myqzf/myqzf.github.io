@@ -11100,7 +11100,7 @@ footer.footer .level-end .field {
   color: rgba(35,209,96,0.678) !important;
 }
 .button.is-small {
-  border-radius: 20px;
+  border-radius: 2px;
 }
 a.navbar-item:focus,
 .navbar-link:focus,
@@ -11330,6 +11330,20 @@ a.navbar-item.is-active,
 .content .gt-container .gt-comment-admin .gt-comment-content {
   border: 0.01em solid #deeafb;
 }
+.aplayer-narrow {
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+.aplayer-narrow:hover {
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+}
+.aplayer {
+  transition: all 0.5s ease-out;
+}
+.aplayer .aplayer-miniswitcher {
+  background: #fff !important;
+}
 .content .gt-container .gt-comment-header {
   font-size: 0.875em;
   position: relative;
@@ -11373,7 +11387,6 @@ a.navbar-item.is-active,
 }
 .gt-container .gt-comment-owner {
   padding: 0.2em 0.2em !important;
-  font-size: 0.875em !important;
   margin: 0 0.5em 0 0.5em !important;
 }
 hr {
@@ -11397,6 +11410,9 @@ hr {
 .night {
   color: #c0c0c0 !important;
   background-color: #000;
+}
+.night .aplayer .aplayer-miniswitcher {
+  background: #c0c0c0 !important;
 }
 .night .navbar-highlight {
   background-color: #151313 !important;
@@ -11667,7 +11683,8 @@ hr {
 .night .button.is-transparent {
   color: #c0c0c0;
 }
-.night hr {
+.night hr,
+.night .index-category-tag hr {
   background-color: #989898;
 }
 .night .navbar-menu {
@@ -11698,4 +11715,142 @@ hr {
 }
 .night .friend-card-item {
   color: unset;
+}
+.night .index-category-tag .button.is-small {
+  color: #c0c0c0;
+  filter: unset !important;
+}
+.night .index-category-tag .article-more:hover {
+  background-color: unset !important;
+}
+.index-category-tag {
+  margin-bottom: 1rem;
+}
+.index-category-tag .level-item {
+  display: unset;
+}
+.index-category-tag .button.is-small {
+  border-radius: 2px;
+  margin-bottom: 4px;
+  background-color: unset;
+}
+.index-category-tag hr {
+  background-color: #f5f5f5;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
+  box-shadow: unset;
+}
+/* start commented backslash hack \*/
+* html .clearfix {
+  height: 1%;
+}
+/* banner css */
+#banner {
+  margin-bottom: 1rem;
+}
+#banner .pull-left {
+  float: left !important;
+}
+#banner .pull-right {
+  float: right !important;
+}
+#banner .clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+#banner .clearfix {
+  display: inline-block;
+}
+#banner .clearfix {
+  display: block;
+}
+#banner ul,
+#banner li {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+#banner .carousel-box {
+  position: relative;
+  width: 100%;
+}
+#banner .transverse-box {
+  position: relative;
+  width: 66.7%;
+}
+#banner .img-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+#banner .vertical-box {
+  position: relative;
+  width: 33.3%;
+}
+#banner .vertical-box ul {
+  overflow: hidden;
+}
+#banner .img-item {
+  transition: width 1s;
+}
+#banner .img-item img {
+  width: 100%;
+  height: 100%;
+}
+#banner .vertical-box ul li {
+  font-size: 0;
+}
+#banner .vertical-box ul li img {
+  width: 100%;
+  height: 100%;
+}
+#banner .left-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  color: #fff;
+  margin-top: -35px;
+  font-size: 50px;
+  font-weight: 200;
+  text-align: center;
+  line-height: 100px;
+  width: 50px;
+  height: 70px;
+  background: rgba(0,0,0,0.6);
+  cursor: pointer;
+  z-index: 99;
+}
+#banner .right-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  color: #fff;
+  margin-top: -35px;
+  font-size: 50px;
+  font-weight: 200;
+  text-align: center;
+  line-height: 100px;
+  width: 50px;
+  height: 70px;
+  background: rgba(0,0,0,0.6);
+  cursor: pointer;
+  z-index: 99;
+}
+.index-categories,
+.index-tags {
+  padding: 2px;
+}
+article.article .article-meta {
+  height: 41px;
 }
