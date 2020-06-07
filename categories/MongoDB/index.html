@@ -182,11 +182,40 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>ine"><span class="meta">$</span><span class="bash"> mkdir /usr/<span class="built_in">local</span>/mongodb</span></span><br></pre></td></tr></table></figure>
-<p>2、下载安装包<br>从官网下载：<br><a href="https://www.mongodb.com/download-center?jmp=nav#community">下载地址</a><br>3、解压缩</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> tar -zxvf mongodb-linux-x86_64-ubuntu1604-3.6.3.tgz</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mv mongodb-linux-x86_64-ubuntu1604-3.6.3 mongodb3.6.3  <span class="comment">#修改下目录名</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mkdir /usr/<span class="built_in">local</span>/mongodb/mongodb3.6.3/data   <span class="comment">#创建数据目录</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mkdir /usr/<span class="built_in">local</span>/mongodb/mongodb3.6.3/logs/  <span class="comment">#创建日志目录</span></span></span><br></pre></td></tr></table></figure>
-<p>4、添加到环境变量<br>vim /etc/profile</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#MONGODB</span><br><span class="line">export MONGODB_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;mongodb&#x2F;mongodb3.6.3</span><br><span class="line">export PATH&#x3D;$MONGODB_HOME&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>lass="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#MONGODB</span><br><span class="line">export MONGODB_HOME&#x3D;&#x2F;usr&#x2F;local&#x2F;mongodb&#x2F;mongodb3.6.3</span><br><span class="line">export PATH&#x3D;$MONGODB_HOME&#x2F;bin:$PATH</span><br></pre></td></tr></table></figure>
 <p>source /etc/profile<br>5、创建配置文件</p>
 <p>在2.6版本后引入了YMAL的配置格式，但仍然是向后兼容的。可参考：<a href="https://docs.mongodb.com/manual/reference/configuration-options/index.html">mongodn.conf</a></p>
 <p>vim /etc/mongodb.conf</p>
@@ -248,4 +277,37 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>

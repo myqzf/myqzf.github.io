@@ -26,7 +26,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ python .&#x2F;research&#x2F;api-server&#x2F;server.py 8085</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;server.py&quot;, line 39, in &lt;module&gt;</span><br><span class="line">    import os, json, time, datetime, cherrypy, threading, urllib2</span><br><span class="line">ImportError: No module named cherrypy</span><br></pre></td></tr></table></figure>
 <p>解决：安装CherryPy(<a href="http://cherrypy.org/">官网</a>)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ python .&#x2F;objs&#x2F;CherryPy-3.2.4setup.py install</span><br><span class="line">$ python -c &quot;import cherrypy&quot;  # 验证</span><br></pre></td></tr></table></figure>
-</div><ul class="post-copyright"><li><strong>本文标题：</strong><a href="http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/">SRS流媒体服务器</a></li><li><strong>本文作者：</strong><a href="http://yoursite.com">qzf</a></li><li><strong>本文链接：</strong><a href="http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/">http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/</a></li><li><strong>版权声明：</strong><span>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</span></li></ul><div><div class="recommend-post"><span class="is-size-6 has-text-grey has-mr-7"># 相关文章</span><br><span>  1.<a class="is-size-6" href="/2018/03/21/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E5%88%86%E5%8F%91RTMP%E6%B5%81%E5%8F%8AHLS%E6%B5%81/" target="_blank">SRS分发RTMP流及HLS流</a><br></span><span>  2.<a class="is-size-6" href="/2018/03/20/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E7%82%B9%E6%92%ADFLV%E6%B5%81/" target="_blank">SRS-HTTP-FLV点播FLV流</a><br></span><span>  3.<a class="is-size-6" href="/2018/03/07/%E6%B5%81%E5%AA%92%E4%BD%93/nginx/nginx%E6%90%AD%E5%BB%BARTMP%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_blank">nginx搭建RTMP流媒体服务器</a><br></span></div></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/css/share.min.css"><div class="social-share"></div><script src="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button is-info donate"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="hhttps://cdn.jsdelivr.net/gh/myqzf/blog_img/img/personal/e80a99d8229f272004619e81ec43db3.jpg" alt="支付宝"></span></a><a class="button is-success donate"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="https://cdn.jsdelivr.net/gh/myqzf/blog_img/img/personal/d29488ecca6583a23675cb342611883.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2018/03/21/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E5%88%86%E5%8F%91RTMP%E6%B5%81%E5%8F%8AHLS%E6%B5%81/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">SRS分发RTMP流及HLS流</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2018/03/20/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E7%82%B9%E6%92%ADFLV%E6%B5%81/"><span class="level-item">SRS-HTTP-FLV点播FLV流</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><div class="title is-5">评论</div><div id="comment-container"></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/gitalk/1.6.0/gitalk.css"><script> $.getScript('/js/gitalk.min.js', function () { 
+</div><ul class="post-copyright"><li><strong>本文标题：</strong><a href="http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/">SRS流媒体服务器</a></li><li><strong>本文作者：</strong><a href="http://yoursite.com">qzf</a></li><li><strong>本文链接：</strong><a href="http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/">http://yoursite.com/2018/03/20/流媒体/srs/SRS流媒体服务器/</a></li><li><strong>版权声明：</strong><span>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</span></li></ul><div><div class="recommend-post"><span class="is-size-6 has-text-grey has-mr-7"># 相关文章</span><br><span>  1.<a class="is-size-6" href="/2018/03/21/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E5%88%86%E5%8F%91RTMP%E6%B5%81%E5%8F%8AHLS%E6%B5%81/" target="_blank">SRS分发RTMP流及HLS流</a><br></span><span>  2.<a class="is-size-6" href="/2018/03/20/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E7%82%B9%E6%92%ADFLV%E6%B5%81/" target="_blank">SRS-HTTP-FLV点播FLV流</a><br></span><span>  3.<a class="is-size-6" href="/2018/03/07/%E6%B5%81%E5%AA%92%E4%BD%93/nginx/nginx%E6%90%AD%E5%BB%BARTMP%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_blank">nginx搭建RTMP流媒体服务器</a><br></span></div></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/css/share.min.css"><div class="social-share"></div><script src="https://cdnjs.loli.net/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button is-info donate"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="hhttps://cdn.jsdelivr.net/gh/myqzf/blog_img/img/personal/e80a99d8229f272004619e81ec43db3.jpg" alt="支付宝"></span></a><a class="button is-success donate"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="https://cdn.jsdelivr.net/gh/myqzf/blog_img/img/personal/d29488ecca6583a23675cb342611883.jpg" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2018/03/20/%E6%B5%81%E5%AA%92%E4%BD%93/srs/SRS%E7%82%B9%E6%92%ADFLV%E6%B5%81/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">SRS-HTTP-FLV点播FLV流</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2018/03/19/%E6%95%B0%E6%8D%AE%E5%BA%93/mongodb/MongoDB%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD/"><span class="level-item">MongoDb自动备份</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><div class="title is-5">评论</div><div id="comment-container"></div><link rel="stylesheet" href="https://cdnjs.loli.net/ajax/libs/gitalk/1.6.0/gitalk.css"><script> $.getScript('/js/gitalk.min.js', function () { 
             var gitalk = new Gitalk({
             language:'zh-CN',
             id: '20ab2859d8b81a9d7a46c1d206ba2249',
@@ -89,4 +89,37 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>

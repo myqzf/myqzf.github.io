@@ -46,7 +46,40 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html></span> <span class="keyword">void</span> <span class="title">uploadImage</span><span class="params">(@RequestParam MultipartFile upload, @RequestParam String CKEditor,@RequestParam String CKEditorFuncNum,@RequestParam String langCode, HttpServletRequest request, HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">byte</span>[] imgBytes = <span class="keyword">null</span>;</span><br><span class="line">  String callback = CKEditorFuncNum;</span><br><span class="line">  response.setContentType(<span class="string">"text/html;charset=UTF-8"</span>);</span><br><span class="line">  response.setHeader(<span class="string">"X-Frame-Options"</span>, <span class="string">"SAMEORIGIN"</span>);</span><br><span class="line">  PrintWriter out = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (upload == <span class="keyword">null</span> || upload.isEmpty()) &#123;</span><br><span class="line">      <span class="keyword">return</span> ;</span><br><span class="line">    &#125;</span><br><span class="line">    out = response.getWriter();</span><br><span class="line">    imgBytes = upload.getBytes();</span><br><span class="line"></span><br><span class="line">    CkImgData imgData = <span class="keyword">new</span> CkImgData();</span><br><span class="line">    imgData.setImgData(imgBytes);</span><br><span class="line">    imgData.setFileName(upload.getOriginalFilename());</span><br><span class="line">    imgData.setUploadTime(Utils.getTimeString(<span class="keyword">new</span> Date()));</span><br><span class="line"></span><br><span class="line">    jdbcService.save(imgData);</span><br><span class="line">    <span class="comment">// 图片访问路径</span></span><br><span class="line">    String imgurl =request.getContextPath() + <span class="string">"/admin/imgfile/"</span> + imgData.getUid();</span><br><span class="line"></span><br><span class="line">    out.print(<span class="string">"&lt;script type=\"text/javascript\"&gt;window.parent.CKEDITOR.tools.callFunction("</span> + callback + <span class="string">",'"</span> + imgurl + <span class="string">"','');&lt;/script&gt;"</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    out.println(<span class="string">"&lt;script type=\"text/javascript\"&gt;window.parent.CKEDITOR.tools.callFunction("</span> + callback + <span class="string">",'',"</span> + <span class="string">"'文件格式不正确');&lt;/script&gt;"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>s="keyword">new</span> CkImgData();</span><br><span class="line">    imgData.setImgData(imgBytes);</span><br><span class="line">    imgData.setFileName(upload.getOriginalFilename());</span><br><span class="line">    imgData.setUploadTime(Utils.getTimeString(<span class="keyword">new</span> Date()));</span><br><span class="line"></span><br><span class="line">    jdbcService.save(imgData);</span><br><span class="line">    <span class="comment">// 图片访问路径</span></span><br><span class="line">    String imgurl =request.getContextPath() + <span class="string">"/admin/imgfile/"</span> + imgData.getUid();</span><br><span class="line"></span><br><span class="line">    out.print(<span class="string">"&lt;script type=\"text/javascript\"&gt;window.parent.CKEDITOR.tools.callFunction("</span> + callback + <span class="string">",'"</span> + imgurl + <span class="string">"','');&lt;/script&gt;"</span>);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    out.println(<span class="string">"&lt;script type=\"text/javascript\"&gt;window.parent.CKEDITOR.tools.callFunction("</span> + callback + <span class="string">",'',"</span> + <span class="string">"'文件格式不正确');&lt;/script&gt;"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>注意：<br>1、跨域问题。<br>2、返回的js代码不显示图片的问题 。 参考：<a href="http://wolfgangkiefer.blog.163.com/blog/static/86265503201421954732369/">http://wolfgangkiefer.blog.163.com/blog/static/86265503201421954732369/</a><br>response要进行如下设置：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">response.setContentType(<span class="string">"text/html;charset=UTF-8"</span>);</span><br><span class="line">response.setHeader(<span class="string">"X-Frame-Options"</span>, <span class="string">"SAMEORIGIN"</span>);</span><br></pre></td></tr></table></figure>
 
@@ -151,4 +184,37 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>

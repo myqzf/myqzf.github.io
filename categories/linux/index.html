@@ -216,8 +216,40 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>gure>
-<h6 id="当前时间格式化输出"><a href="#当前时间格式化输出" class="headerlink" title="当前时间格式化输出"></a>当前时间格式化输出</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> date <span class="string">"+%Y-%m-%d %H:%M:%S"</span></span></span><br></pre></td></tr></table></figure></div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/linux/">linux</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/ntp/">ntp</a></div><hr></div><div class="level is-mobile is-flex"><div class="level-start"><div class="level-item"><a class="article-more button is-small size-small link-muted" href="/2018/08/30/linux/ubuntu%E4%BF%AE%E6%94%B9%E6%97%B6%E9%97%B4(%E4%BA%8C)/#more">阅读更多&gt;&gt;</a></div></div><div class="level-start"><div class="level-item has-text-grey is-size-7"><time datetime="2018-08-30T03:11:42.000Z"><i class="far fa-calendar-check"> 最后修改: </i>2018-08-30</time></div></div></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-06-05  <a class="commentCountImg" href="/2018/06/05/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/#comment-container"><span class="display-none-class">8018e02f9a57ccdca55d8a0463e22be8</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="8018e02f9a57ccdca55d8a0463e22be8">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>几秒  <i class="fas fa-pencil-alt"> </i>0.1 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/06/05/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/">adduser新增用户</a></h1><div class="content"><p>adduser新增用户</p>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-06-05  <a class="commentCountImg" href="/2018/06/05/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/#comment-container"><span class="display-none-class">8018e02f9a57ccdca55d8a0463e22be8</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="8018e02f9a57ccdca55d8a0463e22be8">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>几秒  <i class="fas fa-pencil-alt"> </i>0.1 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/06/05/linux/%E5%91%BD%E4%BB%A4/adduser%E6%96%B0%E5%A2%9E%E7%94%A8%E6%88%B7/">adduser新增用户</a></h1><div class="content"><p>adduser新增用户</p>
 <p>useradd新增用户比较复杂，可用adduser新增用户。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> adduser elastic</span></span><br><span class="line">Adding user `elastic' ...</span><br><span class="line">Adding new group `elastic' (1000) ...</span><br><span class="line">Adding new user `elastic' (1000) with group `elastic' ...</span><br><span class="line">Creating home directory `/home/elastic' ...</span><br><span class="line">Copying files from `/etc/skel' ...</span><br><span class="line">Enter new UNIX password:</span><br><span class="line">Retype new UNIX password:</span><br><span class="line">passwd: password updated successfully</span><br><span class="line">Changing the user information for elastic</span><br><span class="line">Enter the new value, or press ENTER for the default</span><br><span class="line">        Full Name []: elasticsearch</span><br><span class="line">        Room Number []:</span><br><span class="line">        Work Phone []:</span><br><span class="line">        Home Phone []:</span><br><span class="line">        Other []:</span><br><span class="line">Is the information correct? [Y/n] y</span><br></pre></td></tr></table></figure>
 
@@ -267,4 +299,37 @@
                 CONTENT_URL: '/content.json',
             };
             window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-        })(window);</script><script src="/js/insight.js" defer></script></body></html>
+        })(window);</script><script src="/js/insight.js" defer></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script><script type="text/javascript">var pjax = new Pjax({
+            elements: "a",//代表点击链接就更新
+            selectors: [  //代表要更新的节点
+                ".section",
+                "title"
+            ],
+            cache: true,
+            cacheBust:false
+        })
+
+        function loadBusuanzi(){
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js", function () {});
+        }
+
+        // 开始 PJAX 执行的函数
+        document.addEventListener('pjax:send', function () {
+        });
+        
+        // PJAX 完成之后执行的函数，可以和上面的重载放在一起
+        document.addEventListener('pjax:complete', function () {
+            $(".section").css({opacity:1});
+            if(true){
+                $.getScript('/js/comment-issue-data.js',function(){loadIssueData('346786efc5b84527da04','f2c914ba7ed25ca1ece1d69f795a10d67e6effb1','myqzf','blog_comment',false);});
+            }
+            if(false){
+                loadMathJax();
+            }
+            loadMainJs(jQuery, window.moment, window.ClipboardJS, window.IcarusThemeSettings);
+            loadBackTop();
+            loadBusuanzi();
+            if(typeof loadBanner == 'function'){
+                loadBanner();
+            }
+        });</script></body></html>
