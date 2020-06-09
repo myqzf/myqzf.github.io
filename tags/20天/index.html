@@ -37,6 +37,49 @@
 <li>如果一个对象某个字段不想被序列化到硬盘上，可以使用关键字transient修饰。  </li>
 <li>如果一个类维护了另外一个类的引用，则另外一个类也需要实现Serializable接口。  </li>
 </ol>
+</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/exercise/">exercise</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/IO%E6%B5%81/">IO流</a><span> </span><a class="article-more button is-small link-muted index-tags" href="/tags/20%E5%A4%A9/">20天</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-05-01  <a class="commentCountImg" href="/2018/05/01/java/exercise/IO/PipedStreamDemo/#comment-container"><span class="display-none-class">ff78396f39c94b6841f619d46e384ca4</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="ff78396f39c94b6841f619d46e384ca4">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>5 分钟  <i class="fas fa-pencil-alt"> </i>0.8 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/05/01/java/exercise/IO/PipedStreamDemo/">管道流对象PipedInputStream</a></h1><div class="content"><p>管道流对象<br>PipedInputStream、PipedOutputStream<br>可以让多线程通过管道进行线程间的通讯。<br>管道的输入输出是通过一个循环缓冲数组实现，这个数组默认大小1024字节，输入流PipedInputStream从这个缓冲数组中读数据，输出流PipedOutputStream向这个循环数组中写入数据。当这个缓冲数组首次为空的时候，输入流PipedInputStream所在的线程将会堵塞；当这个缓冲数组已满时，输出流PipedOutputStream所在的线程将会堵塞。  </p>
+<p>不要再单个线程使用这两个对象，因为它可能会使线程死锁。</p>
+<p>PipedInputStream：<br>构造方法：</p>
+<ul>
+<li><p>PipedInputStream() 创建一个 PipedInputStream 对象。尚未 connected。</p>
+</li>
+<li><p>PipedInputStream(int pipeSize) 创建一个 PipedInputStream ，尚未 connected ，并使用指定的管道大小作为管道的缓冲区。</p>
+</li>
+<li><p>PipedInputStream(PipedOutputStream src) 创建一个 PipedInputStream ，使其连接到管道输出流 src 。</p>
+</li>
+<li><p>PipedInputStream(PipedOutputStream src, int pipeSize)  创建一个 PipedInputStream ，使其连接到管道输出流 src ，并为管道缓冲区使用指定的管道大小。</p>
+</li>
+<li><p>void connect(PipedOutputStream src) 使此管道输入流连接到管道输出流src 。 如果此对象已连接到其他管道输出流，则抛出IOException 。</p>
+</li>
+<li><p>void receive(int b) 接收一个字节的数据。 如果没有输入可用，此方法将阻止。</p>
+</li>
+<li><p>int read() 从这个管道输入流读取数据的下一个字节。</p>
+</li>
+<li><p>int read(byte[] b, int off, int len) 从这个管道输入流读取len字节的数据到字节数组。</p>
+</li>
+<li><p>int available() 返回可以从该输入流读取而不阻塞的字节数。</p>
+</li>
+<li><p>void close() 关闭此管道输入流。</p>
+</li>
+<li><p>void write(byte[] b, int off, int len) 从指定的字节数组写入len字节。</p>
+</li>
+<li><p>void flush() 刷新此输出流并强制任何缓冲的输出字节被写出。</p>
+</li>
+<li><p>void close() 关闭此管道输出流。</p>
+</li>
+</ul>
+<p>PipedOutputStream：<br>构造方法：</p>
+<ul>
+<li><p>PipedOutputStream() 创建一个尚未连接到管道输入流的管道输出流。</p>
+</li>
+<li><p>PipedOutputStream(PipedInputStream snk)  创建连接到指定管道输入流的管道输出流。</p>
+</li>
+<li><p>void connect(PipedInputStream snk) 将此管道输出流连接到输入流。</p>
+</li>
+<li><p>void write(int b) 写入指定byte到管道输出流。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line"></span><br><span class="line">class Read implements Runnable&#123;</span><br><span class="line">	private PipedInputStream in;</span><br><span class="line">	Read(PipedInputStream in)&#123;</span><br><span class="line">		this.in &#x3D; in;</span><br><span class="line">	&#125;</span><br><span class="line">	public void run()&#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			byte[] buf &#x3D; new byte[1024];</span><br><span class="line">			System.out.println(&quot;读取前没有数据，就堵塞。&quot;);</span><br><span class="line">			int len &#x3D; in.read(buf);</span><br><span class="line">			System.out.println(&quot;读到数据，堵塞结束。&quot;);</span><br><span class="line">			String s &#x3D; new String(buf,0,len);</span><br><span class="line">			System.out.println(s);</span><br><span class="line">			in.close();</span><br><span class="line">		&#125;catch(IOException e)&#123;</span><br><span class="line">			throw new RuntimeException(&quot;读取管道流异常！&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class Write implements Runnable&#123;</span><br><span class="line">	private PipedOutputStream out;</span><br><span class="line">	Write(PipedOutputStream out)&#123;</span><br><span class="line">		this.out &#x3D; out;</span><br><span class="line">	&#125;</span><br><span class="line">	public void run()&#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			System.out.println(&quot;开始写入数据，等待六秒后。&quot;);</span><br><span class="line">			Thread.sleep(6000);</span><br><span class="line">			out.write(&quot;gandaoliushuju ...&quot;.getBytes());</span><br><span class="line">			out.close();</span><br><span class="line">		&#125;catch(Exception e)&#123;</span><br><span class="line">			throw new RuntimeException(&quot;输出管道流异常！&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class PipedStreamDemo&#123;</span><br><span class="line">	public static void main(String[] args) throws Exception&#123;</span><br><span class="line">		PipedInputStream in &#x3D; new PipedInputStream();</span><br><span class="line">		PipedOutputStream out &#x3D; new PipedOutputStream();</span><br><span class="line">		in.connect(out);</span><br><span class="line">		Read r &#x3D; new Read(in);</span><br><span class="line">		Write w &#x3D; new Write(out);</span><br><span class="line">		new Thread(r).start();</span><br><span class="line">		new Thread(w).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/exercise/">exercise</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/IO%E6%B5%81/">IO流</a><span> </span><a class="article-more button is-small link-muted index-tags" href="/tags/20%E5%A4%A9/">20天</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-05-01  <a class="commentCountImg" href="/2018/05/01/java/exercise/IO/PrintWriterDemo/#comment-container"><span class="display-none-class">f5636b47ae7008059989f6345c7b4a8c</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="f5636b47ae7008059989f6345c7b4a8c">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>5 分钟  <i class="fas fa-pencil-alt"> </i>0.8 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/05/01/java/exercise/IO/PrintWriterDemo/">打印流PrintWriter与PrintStream</a></h1><div class="content"><p>打印流：<br>该流提供了打印方法，可以将各种数据类型的数据都原样打印。</p>
 <p>字节打印流：<br>PrintStream<br>构造函数可以接收的参数类型。<br>1、file对象。File    </p>
 <ul>
@@ -90,49 +133,6 @@
 <li>PrintWriter(Writer out, boolean autoFlush)</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line">class PrintWriterDemo&#123;</span><br><span class="line">	public static void main(String[] args) throws IOException&#123;</span><br><span class="line">		BufferedReader bufr &#x3D; new BufferedReader(new InputStreamReader(System.in));</span><br><span class="line"></span><br><span class="line">		&#x2F;&#x2F;PrintWriter out &#x3D; new PrintWriter(System.out,true);</span><br><span class="line">		PrintWriter out &#x3D; new PrintWriter(new FileWriter(&quot;a.txt&quot;),true);</span><br><span class="line">		String line &#x3D; null;</span><br><span class="line">		while((line&#x3D;bufr.readLine())!&#x3D;null)&#123;</span><br><span class="line">			if(&quot;over&quot;.equals(line))</span><br><span class="line">				break;</span><br><span class="line">			out.println(line.toUpperCase());</span><br><span class="line">			&#x2F;&#x2F;out.flush();</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		out.close();</span><br><span class="line">		bufr.close();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/exercise/">exercise</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/IO%E6%B5%81/">IO流</a><span> </span><a class="article-more button is-small link-muted index-tags" href="/tags/20%E5%A4%A9/">20天</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-05-01  <a class="commentCountImg" href="/2018/05/01/java/exercise/IO/PipedStreamDemo/#comment-container"><span class="display-none-class">ff78396f39c94b6841f619d46e384ca4</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="ff78396f39c94b6841f619d46e384ca4">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>5 分钟  <i class="fas fa-pencil-alt"> </i>0.8 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/05/01/java/exercise/IO/PipedStreamDemo/">管道流对象PipedInputStream</a></h1><div class="content"><p>管道流对象<br>PipedInputStream、PipedOutputStream<br>可以让多线程通过管道进行线程间的通讯。<br>管道的输入输出是通过一个循环缓冲数组实现，这个数组默认大小1024字节，输入流PipedInputStream从这个缓冲数组中读数据，输出流PipedOutputStream向这个循环数组中写入数据。当这个缓冲数组首次为空的时候，输入流PipedInputStream所在的线程将会堵塞；当这个缓冲数组已满时，输出流PipedOutputStream所在的线程将会堵塞。  </p>
-<p>不要再单个线程使用这两个对象，因为它可能会使线程死锁。</p>
-<p>PipedInputStream：<br>构造方法：</p>
-<ul>
-<li><p>PipedInputStream() 创建一个 PipedInputStream 对象。尚未 connected。</p>
-</li>
-<li><p>PipedInputStream(int pipeSize) 创建一个 PipedInputStream ，尚未 connected ，并使用指定的管道大小作为管道的缓冲区。</p>
-</li>
-<li><p>PipedInputStream(PipedOutputStream src) 创建一个 PipedInputStream ，使其连接到管道输出流 src 。</p>
-</li>
-<li><p>PipedInputStream(PipedOutputStream src, int pipeSize)  创建一个 PipedInputStream ，使其连接到管道输出流 src ，并为管道缓冲区使用指定的管道大小。</p>
-</li>
-<li><p>void connect(PipedOutputStream src) 使此管道输入流连接到管道输出流src 。 如果此对象已连接到其他管道输出流，则抛出IOException 。</p>
-</li>
-<li><p>void receive(int b) 接收一个字节的数据。 如果没有输入可用，此方法将阻止。</p>
-</li>
-<li><p>int read() 从这个管道输入流读取数据的下一个字节。</p>
-</li>
-<li><p>int read(byte[] b, int off, int len) 从这个管道输入流读取len字节的数据到字节数组。</p>
-</li>
-<li><p>int available() 返回可以从该输入流读取而不阻塞的字节数。</p>
-</li>
-<li><p>void close() 关闭此管道输入流。</p>
-</li>
-<li><p>void write(byte[] b, int off, int len) 从指定的字节数组写入len字节。</p>
-</li>
-<li><p>void flush() 刷新此输出流并强制任何缓冲的输出字节被写出。</p>
-</li>
-<li><p>void close() 关闭此管道输出流。</p>
-</li>
-</ul>
-<p>PipedOutputStream：<br>构造方法：</p>
-<ul>
-<li><p>PipedOutputStream() 创建一个尚未连接到管道输入流的管道输出流。</p>
-</li>
-<li><p>PipedOutputStream(PipedInputStream snk)  创建连接到指定管道输入流的管道输出流。</p>
-</li>
-<li><p>void connect(PipedInputStream snk) 将此管道输出流连接到输入流。</p>
-</li>
-<li><p>void write(int b) 写入指定byte到管道输出流。</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import java.io.*;</span><br><span class="line"></span><br><span class="line">class Read implements Runnable&#123;</span><br><span class="line">	private PipedInputStream in;</span><br><span class="line">	Read(PipedInputStream in)&#123;</span><br><span class="line">		this.in &#x3D; in;</span><br><span class="line">	&#125;</span><br><span class="line">	public void run()&#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			byte[] buf &#x3D; new byte[1024];</span><br><span class="line">			System.out.println(&quot;读取前没有数据，就堵塞。&quot;);</span><br><span class="line">			int len &#x3D; in.read(buf);</span><br><span class="line">			System.out.println(&quot;读到数据，堵塞结束。&quot;);</span><br><span class="line">			String s &#x3D; new String(buf,0,len);</span><br><span class="line">			System.out.println(s);</span><br><span class="line">			in.close();</span><br><span class="line">		&#125;catch(IOException e)&#123;</span><br><span class="line">			throw new RuntimeException(&quot;读取管道流异常！&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class Write implements Runnable&#123;</span><br><span class="line">	private PipedOutputStream out;</span><br><span class="line">	Write(PipedOutputStream out)&#123;</span><br><span class="line">		this.out &#x3D; out;</span><br><span class="line">	&#125;</span><br><span class="line">	public void run()&#123;</span><br><span class="line">		try&#123;</span><br><span class="line">			System.out.println(&quot;开始写入数据，等待六秒后。&quot;);</span><br><span class="line">			Thread.sleep(6000);</span><br><span class="line">			out.write(&quot;gandaoliushuju ...&quot;.getBytes());</span><br><span class="line">			out.close();</span><br><span class="line">		&#125;catch(Exception e)&#123;</span><br><span class="line">			throw new RuntimeException(&quot;输出管道流异常！&quot;);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">class PipedStreamDemo&#123;</span><br><span class="line">	public static void main(String[] args) throws Exception&#123;</span><br><span class="line">		PipedInputStream in &#x3D; new PipedInputStream();</span><br><span class="line">		PipedOutputStream out &#x3D; new PipedOutputStream();</span><br><span class="line">		in.connect(out);</span><br><span class="line">		Read r &#x3D; new Read(in);</span><br><span class="line">		Write w &#x3D; new Write(out);</span><br><span class="line">		new Thread(r).start();</span><br><span class="line">		new Thread(w).start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/exercise/">exercise</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/IO%E6%B5%81/">IO流</a><span> </span><a class="article-more button is-small link-muted index-tags" href="/tags/20%E5%A4%A9/">20天</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2018-05-01  <a class="commentCountImg" href="/2018/05/01/java/exercise/IO/RandomAccessFileDemo/#comment-container"><span class="display-none-class">6835173d6fc393c3c4c0820650290ead</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="6835173d6fc393c3c4c0820650290ead">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>5 分钟  <i class="fas fa-pencil-alt"> </i>0.7 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2018/05/01/java/exercise/IO/RandomAccessFileDemo/">随机访问流对象RandomAccessFile</a></h1><div class="content"><p>RandomAccessFile<br>可以指定文件中任何一个位置去操作一个文件。  </p>
 <p>该类不是IO体系中的子类。<br>而是直接继承自object。</p>
 <p>但是它是IO包中的成员。因为它具备读和写的功能。<br>内部封装了一个数组，而且通过指针对数组的元素进行操作。<br>可以通过getFilePointer获取指针位置。<br>同时可以通过seek改变指针的位置。  </p>
