@@ -7,45 +7,6 @@
 
 <p> 然后git commit</p>
 <p> 最后.gitignore中的忽略，就会起作用</p>
-</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-28  <a class="commentCountImg" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/#comment-container"><span class="display-none-class">0a9987f0ec6db6c1ee9b94313cd4af3a</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="0a9987f0ec6db6c1ee9b94313cd4af3a">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>3 分钟  <i class="fas fa-pencil-alt"> </i>0.5 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/">git服务器的用户管理</a></h1><div class="content"><p>1、添加用户</p>
-<ul>
-<li><p>要添加新用户alice，bob和carol，首先获取他们的公钥，并将它们分别添加到管理员“gitolite-admin/keydir”作为alice.pub，bob.pub和carol.pub。(以用户名进行命名。)</p>
-</li>
-<li><p>要添加一个新的仓库repo:foo,并给予上述这些用户不同级别的访问权限编辑 <code>vim conf/gitolite.conf</code></p>
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+         =   alice</span><br><span class="line">    RW          =   bob</span><br><span class="line">    R           =   carol</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>完成这些更改后，执行以下操作： </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git add conf</span><br><span class="line">git add keydir</span><br><span class="line">git commit -m "added foo, gave access to alice, bob, carol"</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>push完之后，gitolite将添加新的用户到 ~/.ssh/authorized_keys服务器上，以及创建一个名为foo的空的repo。 </p>
-</li>
-</ul>
-<p>2、访问规则 </p>
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+                     =   alice</span><br><span class="line">    -   master              =   bob</span><br><span class="line">    -   refs/tags/v[0-9]    =   bob</span><br><span class="line">    RW                      =   bob</span><br><span class="line">    RW  refs/tags/v[0-9]    =   carol</span><br><span class="line">    R                       =   dave</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>alice可以对任何分支或标签做任何事情, 创建，推送，删除,撤回，覆盖等。</li>
-<li>bob 可以创建或推送名称不以“master”开头的分支，并创建名称不以“v”+数字开头的任何标签。</li>
-<li>carol可以创建名称以“v”+数字开头的标签。</li>
-<li>dave仅可以克隆。</li>
-</ul>
-<p>3、组</p>
-<ul>
-<li><p>方便群组用户管理，下面是创建了两个组</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob carol</span><br><span class="line">@interns    =   ashok</span><br><span class="line">repo secret</span><br><span class="line">    RW      =   @staff</span><br><span class="line">repo foss</span><br><span class="line">    RW+     =   @staff</span><br><span class="line">    RW      =   @interns</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>组列表累积。以下两行与上面的@staff的早期定义具有相同的效果： </p>
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob</span><br><span class="line">@staff      =   carol</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可以在其它组中使用组名 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@all-devs   =   @staff @interns</span><br></pre></td></tr></table></figure>
-
-<p>帮助用户 </p>
-<p>1、用户可以通过 git clone git@host:reponame的形式克隆仓库。 </p>
-<p>2、用户可以通过 ssh git@host info 查看可访问的仓库及权限。 </p>
-<p>3、用户可以通过 ssh git@host help获取帮助。 </p>
-</li>
-</ul>
 </div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-28  <a class="commentCountImg" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6-%E4%BA%8C/#comment-container"><span class="display-none-class">bd1a6ffc20ff15e6b01d4ac05f7c734e</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="bd1a6ffc20ff15e6b01d4ac05f7c734e">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>8 分钟  <i class="fas fa-pencil-alt"> </i>1.2 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6-%E4%BA%8C/">git服务器的权限控制</a></h1><div class="content"><p>权限控制 </p>
 <p>git的权限控制是采用的gitolite，自身就是一个特殊的git版本库（gitolite-admin），他们的管理与配置都可以通过git的方式，分布式的进行修改，然后通过push的方式提交到服务器，服务器会通过所谓的钩子脚本自动更新权限控制文件。 </p>
 <p>1、切换到git用户下(git仓库是在git用户下) </p>
@@ -85,6 +46,45 @@
 <p>push成功，当前超级管理员用户应该就可以成功clone helloworld版本库，并进行添加、删除、修改与push等操作了。 </p>
 <p>参考：</p>
 <p><a href="http://blog.csdn.net/xsl1990/article/details/25486211">http://blog.csdn.net/xsl1990/article/details/25486211</a> <a href="https://github.com/sitaramc/gitolite">https://github.com/sitaramc/gitolite</a> </p>
+</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-28  <a class="commentCountImg" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/#comment-container"><span class="display-none-class">0a9987f0ec6db6c1ee9b94313cd4af3a</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="0a9987f0ec6db6c1ee9b94313cd4af3a">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>3 分钟  <i class="fas fa-pencil-alt"> </i>0.5 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/">git服务器的用户管理</a></h1><div class="content"><p>1、添加用户</p>
+<ul>
+<li><p>要添加新用户alice，bob和carol，首先获取他们的公钥，并将它们分别添加到管理员“gitolite-admin/keydir”作为alice.pub，bob.pub和carol.pub。(以用户名进行命名。)</p>
+</li>
+<li><p>要添加一个新的仓库repo:foo,并给予上述这些用户不同级别的访问权限编辑 <code>vim conf/gitolite.conf</code></p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+         =   alice</span><br><span class="line">    RW          =   bob</span><br><span class="line">    R           =   carol</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成这些更改后，执行以下操作： </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git add conf</span><br><span class="line">git add keydir</span><br><span class="line">git commit -m "added foo, gave access to alice, bob, carol"</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>push完之后，gitolite将添加新的用户到 ~/.ssh/authorized_keys服务器上，以及创建一个名为foo的空的repo。 </p>
+</li>
+</ul>
+<p>2、访问规则 </p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+                     =   alice</span><br><span class="line">    -   master              =   bob</span><br><span class="line">    -   refs/tags/v[0-9]    =   bob</span><br><span class="line">    RW                      =   bob</span><br><span class="line">    RW  refs/tags/v[0-9]    =   carol</span><br><span class="line">    R                       =   dave</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>alice可以对任何分支或标签做任何事情, 创建，推送，删除,撤回，覆盖等。</li>
+<li>bob 可以创建或推送名称不以“master”开头的分支，并创建名称不以“v”+数字开头的任何标签。</li>
+<li>carol可以创建名称以“v”+数字开头的标签。</li>
+<li>dave仅可以克隆。</li>
+</ul>
+<p>3、组</p>
+<ul>
+<li><p>方便群组用户管理，下面是创建了两个组</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob carol</span><br><span class="line">@interns    =   ashok</span><br><span class="line">repo secret</span><br><span class="line">    RW      =   @staff</span><br><span class="line">repo foss</span><br><span class="line">    RW+     =   @staff</span><br><span class="line">    RW      =   @interns</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组列表累积。以下两行与上面的@staff的早期定义具有相同的效果： </p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob</span><br><span class="line">@staff      =   carol</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以在其它组中使用组名 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@all-devs   =   @staff @interns</span><br></pre></td></tr></table></figure>
+
+<p>帮助用户 </p>
+<p>1、用户可以通过 git clone git@host:reponame的形式克隆仓库。 </p>
+<p>2、用户可以通过 ssh git@host info 查看可访问的仓库及权限。 </p>
+<p>3、用户可以通过 ssh git@host help获取帮助。 </p>
+</li>
+</ul>
 </div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-23  <a class="commentCountImg" href="/2017/08/23/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E6%AD%A5%E7%AE%80%E5%8D%95%E9%83%A8%E7%BD%B2-%E4%B8%80/#comment-container"><span class="display-none-class">7b9c7268179695742ebdbe2728c0fb21</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="7b9c7268179695742ebdbe2728c0fb21">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>3 分钟  <i class="fas fa-pencil-alt"> </i>0.5 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/23/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%88%9D%E6%AD%A5%E7%AE%80%E5%8D%95%E9%83%A8%E7%BD%B2-%E4%B8%80/">git服务器的初步简单部署</a></h1><div class="content"><p>git服务器的初步简单部署 </p>
 <p>环境：git服务器Ubuntu，开发机器Windows 7。 </p>
 <p>1、安装git </p>
@@ -118,7 +118,7 @@
 
 <p>7、多用户与权限管理 </p>
 <p>如果团队人数较少，把每个人的公钥收集起来放到服务器的/home/git/.ssh/authorized_keys文件里就是可行的。如果团队人数较多，就比较麻烦了，这时，可以用Gitosis来管理公钥。 </p>
-</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><!--!--><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="is-rounded" src="/img/avatar.png" alt="辣椒の酱"></figure><p class="title is-size-4 is-block line-height-inherit">辣椒の酱</p><p class="is-size-6 is-block">尚未执佩剑，转眼即江湖</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>阿尔及利亚</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">279</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">43</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">93</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://weibo.com/u/3050419984" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/myqzf"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Weibo" href="https://weibo.com/u/3050419984"><i class="fab fa-weibo"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Email" href="mailto:qzf98763@163.com"><i class="fa fa-envelope"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Next" href="https://removeif.github.io/remove.io"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fas fa-rss"></i></a></div><div><hr><p id="hitokoto">:D 一言句子获取中...</p><script type="text/javascript" defer>function getYiyan(){
+</div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><!--!--><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="is-rounded" src="/img/avatar.png" alt="辣椒の酱"></figure><p class="title is-size-4 is-block line-height-inherit">辣椒の酱</p><p class="is-size-6 is-block">尚未执佩剑，转眼即江湖</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>阿尔及利亚</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">281</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">44</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">94</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://weibo.com/u/3050419984" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/myqzf"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Weibo" href="https://weibo.com/u/3050419984"><i class="fab fa-weibo"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Email" href="mailto:qzf98763@163.com"><i class="fa fa-envelope"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Next" href="https://removeif.github.io/remove.io"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fas fa-rss"></i></a></div><div><hr><p id="hitokoto">:D 一言句子获取中...</p><script type="text/javascript" defer>function getYiyan(){
                                 $.getJSON("https://v1.hitokoto.cn/", function (data) {
                                 if(data){
                                     $('#hitokoto').html("");
