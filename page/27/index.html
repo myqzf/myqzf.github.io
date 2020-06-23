@@ -224,45 +224,45 @@
 </code></pre></li>
 </ul>
 <p>参考：<a href="http://blog.csdn.net/xsl1990/article/details/25486211">http://blog.csdn.net/xsl1990/article/details/25486211</a><br>     <a href="https://github.com/sitaramc/gitolite">https://github.com/sitaramc/gitolite</a></p>
-</div><div class="index-category-tag">  <hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-28  <a class="commentCountImg" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6-%E4%BA%8C/#comment-container"><span class="display-none-class">bd1a6ffc20ff15e6b01d4ac05f7c734e</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="bd1a6ffc20ff15e6b01d4ac05f7c734e">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>8 分钟  <i class="fas fa-pencil-alt"> </i>1.2 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6-%E4%BA%8C/">git服务器的权限控制</a></h1><div class="content"><p>权限控制 </p>
-<p>git的权限控制是采用的gitolite，自身就是一个特殊的git版本库（gitolite-admin），他们的管理与配置都可以通过git的方式，分布式的进行修改，然后通过push的方式提交到服务器，服务器会通过所谓的钩子脚本自动更新权限控制文件。 </p>
-<p>1、切换到git用户下(git仓库是在git用户下) </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> su git</span></span><br></pre></td></tr></table></figure>
+</div><div class="index-category-tag">  <hr></div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><i class="far fa-calendar-plus"> </i>2017-08-28  <a class="commentCountImg" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/#comment-container"><span class="display-none-class">0a9987f0ec6db6c1ee9b94313cd4af3a</span><i class="far fa-comment-dots"></i> <span class="commentCount" id="0a9987f0ec6db6c1ee9b94313cd4af3a">99+</span>  </a><span class="level-item"><i class="far fa-clock"> </i>3 分钟  <i class="fas fa-pencil-alt"> </i>0.5 k</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2017/08/28/%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/git/git%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86-%E4%B8%89/">git服务器的用户管理</a></h1><div class="content"><p>1、添加用户</p>
+<ul>
+<li><p>要添加新用户alice，bob和carol，首先获取他们的公钥，并将它们分别添加到管理员“gitolite-admin/keydir”作为alice.pub，bob.pub和carol.pub。(以用户名进行命名。)</p>
+</li>
+<li><p>要添加一个新的仓库repo:foo,并给予上述这些用户不同级别的访问权限编辑 <code>vim conf/gitolite.conf</code></p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+         =   alice</span><br><span class="line">    RW          =   bob</span><br><span class="line">    R           =   carol</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>完成这些更改后，执行以下操作： </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git add conf</span><br><span class="line">git add keydir</span><br><span class="line">git commit -m "added foo, gave access to alice, bob, carol"</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>push完之后，gitolite将添加新的用户到 ~/.ssh/authorized_keys服务器上，以及创建一个名为foo的空的repo。 </p>
+</li>
+</ul>
+<p>2、访问规则 </p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">repo foo</span><br><span class="line">    RW+                     =   alice</span><br><span class="line">    -   master              =   bob</span><br><span class="line">    -   refs/tags/v[0-9]    =   bob</span><br><span class="line">    RW                      =   bob</span><br><span class="line">    RW  refs/tags/v[0-9]    =   carol</span><br><span class="line">    R                       =   dave</span><br></pre></td></tr></table></figure>
 
-<p>gitolite本质就是根据你的配置，自动生成authorized_keys文件，所以它要求你的authorized_keys文件必须是空的，或者不存在，所以我们干脆删了它 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> rm ~/.ssh/authorized_keys</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>alice可以对任何分支或标签做任何事情, 创建，推送，删除,撤回，覆盖等。</li>
+<li>bob 可以创建或推送名称不以“master”开头的分支，并创建名称不以“v”+数字开头的任何标签。</li>
+<li>carol可以创建名称以“v”+数字开头的标签。</li>
+<li>dave仅可以克隆。</li>
+</ul>
+<p>3、组</p>
+<ul>
+<li><p>方便群组用户管理，下面是创建了两个组</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob carol</span><br><span class="line">@interns    =   ashok</span><br><span class="line">repo secret</span><br><span class="line">    RW      =   @staff</span><br><span class="line">repo foss</span><br><span class="line">    RW+     =   @staff</span><br><span class="line">    RW      =   @interns</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>组列表累积。以下两行与上面的@staff的早期定义具有相同的效果： </p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@staff      =   alice bob</span><br><span class="line">@staff      =   carol</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以在其它组中使用组名 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@all-devs   =   @staff @interns</span><br></pre></td></tr></table></figure>
 
-<p>gitolite在初始化时需要通过某一用户的公钥文件指定一个超级管理员，gitolite安装成功后，只有这个超级管理员可以更新gitolite以更新各种权限控制（包括对其自身的更新权限控制），所以在初始化时需要指定该超级管理员账户的公钥文件（最好直接将其拷贝到git用户的主文件夹下）（下面的示例程序使用同一服务器上的另一常用管理员用户admin）。 </p>
-<p>新建admin用户</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> useradd -m admin</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> passwd admin</span></span><br></pre></td></tr></table></figure>
-
-<p>切换到admin下，生成超级管理员账户的公钥文件 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# su admin</span><br><span class="line">admin@ubuntu:~$ ssh-keygen</span><br><span class="line">admin@ubuntu:~$ sudo cp .ssh/id_rsa.pub /home/git/id_rsa.pub</span><br></pre></td></tr></table></figure>
-
-<p>2、安装gitolite </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">admin@ubuntu:/home/git$ su git</span><br><span class="line">git@ubuntu:~$ cd ~</span><br><span class="line">git@ubuntu:~$ git clone git://github.com/sitaramc/gitolite</span><br><span class="line">git@ubuntu:~$ mkdir -p $HOME/bin #为gitolite的二进制文件生成创建目录</span><br><span class="line">git@ubuntu:~$ gitolite/install -to $HOME/bin/ # 编译生成安装文件</span><br><span class="line">git@ubuntu:~$ $HOME/bin/gitolite setup -pk id_rsa.pub # 安装并初始化，指定id_rsa.pub公钥文件对应的用户为超级管理员</span><br></pre></td></tr></table></figure>
-
-<p> gitolite安装后本身是一个特殊的git版本库——gitolite-admin，分布式的进行修改，然后通过push的方式提交，其会通过钩子脚本执行权限更新。gitolite自动生成了两个版本库：gitolite-admin.git和testing.git，其中的gitol-admin.git就是那个权限控制的版本库。<br>  接下来我们要做的，就是回到你刚刚指定的超级管理员账户的电脑跟账户下，clone出gitolite-admin这个特殊的git版本库（当前情况下，只有该超级管理员账户可以clone并更新gitolite-admin这个版本库），然后根据自己的需要对其进行配置（如添加更多的管理员账户、添加新的版本库并为不同的用户指定权限）</p>
-<p>3、权限设置 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:~# su admin</span><br><span class="line">admin@ubuntu:/root$ cd ~</span><br><span class="line">admin@ubuntu:~$ git clone git@192.168.1.32:gitolite-admin.git</span><br></pre></td></tr></table></figure>
-
-<p>如果上面的步骤都成功了的话，应该可以查看到有一个gitolite-admin的文件夹，文件夹下有两个目录conf、keydir。<br>clone默认路径是/home/git/repositories，权限控制是只有当前的超级管理员用户可以访问gitolite-admin和testing两个版本库，你之前测试创建的版本库也已经无法访问，如果你尝试再次clone之前创建的测试版本库，就会提示没有权限。<br>要继续访问之前创建的项目，需要将这个项目添加到gitolite的权限控制内。<br>下面演示一下为当前的超级管理员用户指定之前创建的helloworld测试版本库的读写权限（可读可写），以此演示gitolite指定权限的一般流程：<br>1、将需要指定权限的用户的ssh公钥文件，存放在gitolite-admin版本库的keydir目录下（如果提交的都是id_rsa.pub，可以将其重命名为该用户的id或者名称，同时也推荐这样重命名，以明示哪个公钥文件是哪个用户的），因为我们初始化时，gitolite已经将该超级管理员的公钥文件自动拷进去了，所以省略此步骤。<br>2、编辑conf目录下的gitolite.conf文件，添加helloworld版本库管理组，为超级管理员指定读写权限（RW+，具体的权限定义，参考gitolite官方文档）</p>
-<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">repo gitolite-admin</span><br><span class="line">RW+ = id_rsa</span><br><span class="line">repo testing</span><br><span class="line">    RW+     =   @all</span><br><span class="line"></span><br><span class="line">repo helloworld</span><br><span class="line">    RW+     =   id_rsa</span><br></pre></td></tr></table></figure>
-
-
-
-<p> 3、commit到本地 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -am ‘add the helloworld repo and add RW+ to id_rsa’</span><br></pre></td></tr></table></figure>
-
-<p>提交时，首先要用名称 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config –global user.email “you@example.com”</span><br><span class="line">git config –global user.name “Your Name”</span><br></pre></td></tr></table></figure>
-
-<p> 4、push到git仓库 </p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push</span><br></pre></td></tr></table></figure>
-
-<p>push成功，当前超级管理员用户应该就可以成功clone helloworld版本库，并进行添加、删除、修改与push等操作了。 </p>
-<p>参考：</p>
-<p><a href="http://blog.csdn.net/xsl1990/article/details/25486211">http://blog.csdn.net/xsl1990/article/details/25486211</a> <a href="https://github.com/sitaramc/gitolite">https://github.com/sitaramc/gitolite</a> </p>
+<p>帮助用户 </p>
+<p>1、用户可以通过 git clone git@host:reponame的形式克隆仓库。 </p>
+<p>2、用户可以通过 ssh git@host info 查看可访问的仓库及权限。 </p>
+<p>3、用户可以通过 ssh git@host help获取帮助。 </p>
+</li>
+</ul>
 </div><div class="index-category-tag"><div class="level-item"><i class="fas fa-folder-open has-text-grey"> </i><a class="article-more button is-small link-muted index-categories" href="/categories/git/">git</a></div>  <div class="level-item"><i class="fas fa-tags has-text-grey"> </i><a class="article-more button is-small link-muted index-tags" href="/tags/git/">git</a></div><hr></div></article></div><nav class="pagination is-centered mt-4" role="navigation" aria-label="pagination"><div class="pagination-previous"><a href="/page/26/">上一页</a></div><div class="pagination-next"><a href="/page/28/">下一页</a></div><ul class="pagination-list is-hidden-mobile"><li><a class="pagination-link" href="/">1</a></li><li><span class="pagination-ellipsis">&hellip;</span></li><li><a class="pagination-link" href="/page/26/">26</a></li><li><a class="pagination-link is-current" href="/page/27/">27</a></li><li><a class="pagination-link" href="/page/28/">28</a></li><li><a class="pagination-link" href="/page/29/">29</a></li></ul></nav></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1 is-sticky"><!--!--><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="is-rounded" src="/img/avatar.png" alt="辣椒の酱"></figure><p class="title is-size-4 is-block line-height-inherit">辣椒の酱</p><p class="is-size-6 is-block">尚未执佩剑，转眼即江湖</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>阿尔及利亚</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">285</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">44</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">95</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://weibo.com/u/3050419984" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/myqzf"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Weibo" href="https://weibo.com/u/3050419984"><i class="fab fa-weibo"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Email" href="mailto:qzf98763@163.com"><i class="fa fa-envelope"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="Next" href="https://removeif.github.io/remove.io"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-white is-marginless" target="_blank" rel="noopener" title="RSS" href="/atom.xml"><i class="fas fa-rss"></i></a></div><div><hr><p id="hitokoto">:D 一言句子获取中...</p><script type="text/javascript" defer>function getYiyan(){
                                 $.getJSON("https://v1.hitokoto.cn/", function (data) {
                                 if(data){
